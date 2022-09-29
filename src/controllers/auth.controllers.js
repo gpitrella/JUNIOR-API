@@ -58,15 +58,17 @@ export const signup = async (req, res) => {
       if (password.length < 4) {
         res.status(401).json({ msg: "Incorrect length password" })
       }
-
       // Look for email coincidence
       const userFound = await User.findOne({ email: email });
+      console.log(userFound)
       if (userFound) {
         res.status(404).json({ msg: "Email already used" });
       } else {
         // Saving a New User
+        console.log(password, rounds)
         let hpassword = hashSync(password, Number.parseInt(rounds))
         const newUser = new User({ name, email, password: hpassword });
+        console.log(newUser)
         await newUser.save();
         // newUser.password = await newUser.encryptPassword(password);
         let token = jwt.sign({ user: newUser }, secret, {expiresIn: expires});
