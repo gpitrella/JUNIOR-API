@@ -58,7 +58,6 @@ export const signup = async (req, res) => {
       if (password.length < 4) {
         res.status(401).json({ msg: "Incorrect length password" })
       }
-      console.log('acaaaaaaaaaa')
       // Look for email coincidence
       const userFound = await User.findOne({ email: email });
       console.log(userFound)
@@ -66,10 +65,8 @@ export const signup = async (req, res) => {
         res.status(404).json({ msg: "Email already used" });
       } else {
         // Saving a New User
-        console.log("acaaaaaaaaaaaaaANTESDELHASH")
         console.log(password, rounds)
         let hpassword = hashSync(password, Number.parseInt(rounds))
-        console.log("acaaaaaaaaaaaaa2")
         const newUser = new User({ name, email, password: hpassword });
         console.log(newUser)
         await newUser.save();

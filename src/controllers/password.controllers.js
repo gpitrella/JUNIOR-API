@@ -28,8 +28,8 @@ export const recoverPassword = async(req,res)=>{
 export const newPassword = async(req,res)=>{
     const {newPassword} = req.body
     const token = req.user
-
-    if(token.length===0 && newPassword===0){
+    console.log(token)
+    if(!token && newPassword===0){
         res.status(400).json({message: 'All the fields are required'})
     }
     res.json(token)
