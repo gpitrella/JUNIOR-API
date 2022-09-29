@@ -18,3 +18,10 @@ export const userProjects = async (req, res)=>{
         res.status(404).send("you don't have any project")
       }
 }
+export const prueba = async(req,res)=>{
+  const {id} = req.body
+  let mynewproperty = await User.findById(id)
+  mynewproperty.token='nueva prop'
+  await mynewproperty.save()
+  res.json(mynewproperty)
+}

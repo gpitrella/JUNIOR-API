@@ -1,10 +1,10 @@
 import { Router } from "express";
-import { AllUsers, userProjects } from "../controllers/user.controllers.js";
-import { isAuthenticated } from "../helpers/auth.js";
+import { AllUsers, prueba, userProjects } from "../controllers/user.controllers.js";
+import auth from "../helpers/auth.js";
 
 const router = Router();
 
-router.get("/allusers", AllUsers)
-router.post("/projects", userProjects)
+router.get("/allusers",auth,AllUsers)
+router.post("/projects", auth ,userProjects)
 
 export default router;
