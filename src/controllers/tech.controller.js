@@ -5,7 +5,7 @@ export const createNewTech = async (req, res) => {
   console.log(name)
   const errors = [];
   if (!name) {
-    errors.push({ text: "Pleeeeeeeeease Write a Tech's Name." });
+    errors.push({ text: "Please Write a Tech's Name." });
   }
   if (errors.length > 0)
     return res.send(errors)
