@@ -9,7 +9,7 @@ app.set('port',PORT)
 
 // parse application/json
 app.use(bodyParser.json())
-
+ 
 app.use("/", routes);
 
 export default app
