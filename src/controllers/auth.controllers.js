@@ -26,7 +26,7 @@ export const signin = async (req, res) => {
             })
           } else {
             // Unauthorized Access
-            res.status(401).json({ msg: "Incorrect password" })
+            res.status(401).json({ msg: "Incorrect password" }) 
         }        
       }
   } catch (err) { 
