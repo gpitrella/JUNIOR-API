@@ -36,7 +36,7 @@ export const signin = async (req, res) => {
 
 export const signup = async (req, res) => {
   try {
-      const { name, email, password, confirm_password } = req.body;
+      const { name, email, password, confirm_password, image } = req.body;
       if (password !== confirm_password) {
         res.status(401).json({ msg: "Passwords do not match." })
       }
@@ -52,7 +52,7 @@ export const signup = async (req, res) => {
         // Saving a New User
         console.log(password, rounds)
         let hpassword = hashSync(password, Number.parseInt(rounds))
-        const newUser = new User({ name, email, password: hpassword });
+        const newUser = new User({ name, email, password: hpassword, image });
         console.log(newUser)
         await newUser.save();
         // newUser.password = await newUser.encryptPassword(password);
