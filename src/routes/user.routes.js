@@ -4,7 +4,7 @@ import auth from "../helpers/auth.js";
 
 const router = Router();
 
-router.get("/allusers",auth,AllUsers)
+router.get("/allusers",AllUsers)
 router.post("/projects", auth ,userProjects)
 
 export default router;
