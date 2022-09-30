@@ -14,9 +14,9 @@ export const signin = async (req, res) => {
       const { email, password } = req.body;
       const userFound = await User.findOne({ email: email });
       if (!userFound) {
-            res.status(404).json({ msg: "User with this email not found" });
+            res.status(404).json({ msg: "Email's User was not found" });
       } else {
-          if (compareSync(password, userFound.password)) {
+          if (compareSync(password, userFound.password)) {  
             // Creamos el token
             let token = jwt.sign({ user: userFound }, secret, {expiresIn: expires});
             res.json({
