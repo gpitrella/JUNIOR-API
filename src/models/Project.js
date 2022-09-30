@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-
+const { Schema } = mongoose;
 // const Tech = mongoose.model("Tech", TechSchema)
 const ProjectSchema = new mongoose.Schema(
   {
@@ -39,6 +39,7 @@ const ProjectSchema = new mongoose.Schema(
       enum: ['develop','finish'],
       default: 'develop'
     },
+    collaborators: [{type: Schema.Types.ObjectId, ref: 'Collaborator'}]
   },
   {
     timestamps: true,
