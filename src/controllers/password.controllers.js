@@ -18,13 +18,13 @@ export const recoverPassword = async(req,res)=>{
     try {
 
         findUser = await User.findOne({email})
-        if(!findUser) res.status(400).json(message);
+        if(!findUser) throw new Error(message);
         token = jwt.sign({ usermail: findUser.email, id: findUser._id }, secret, {expiresIn: expires});
         findUser.token=token
         await findUser.save()
         res.json({message:message})
     } catch (error) {
-        res.status(400).json(message)
+        res.status(400).json(error.message)
     }
     try {
         // send mail with defined transport object
