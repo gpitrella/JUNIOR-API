@@ -34,21 +34,6 @@ export const signin = async (req, res) => {
   }
 }
 
-// router.get(
-//   "/google/callback",
-//   passport.authenticate("google", {
-//     successRedirect: CLIENT_URL,
-//     failureRedirect: "/login/failed",
-//   })
-// );
-
-// export const signin = passport.authenticate("local", {
-//   successRedirect: CLIENT_URL,
-//   failureRedirect: "/login/failed",
-//   failureFlash: true,
-// });
-
-
 export const signup = async (req, res) => {
   try {
       const { name, email, password, confirm_password } = req.body;
