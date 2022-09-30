@@ -1,3 +1,4 @@
+import Project from "../models/Project.js"
 import User from "../models/User.js"
 
 export const AllUsers = async (req,res)=>{
@@ -11,9 +12,12 @@ export const AllUsers = async (req,res)=>{
 export const userProjects = async (req, res)=>{
     let {id} = req.body
     let getMyProjects = await User.findById(id)
-    console.log(getMyProjects)
+    console.log(getMyProjects.projects.length)
     if (getMyProjects.projects.length){
-        res.json(getMyProjects.projects)
+        let projets = getMyProjects.projects.map(async m => await Project.findById(m))
+        const resPromises = await Promise.all(projets)
+        console.log("projects",resPromises )
+        res.json(resPromises)
       } else {
         res.status(404).send("you don't have any project")
       }
