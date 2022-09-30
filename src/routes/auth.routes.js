@@ -2,6 +2,7 @@ import { Router } from "express";
 const router = Router();
 import { signup, signin, logout } from "../controllers/auth.controllers.js";
 import { loginWithGoogle } from "../controllers/loginWithGoogle.js";
+import { loginWithGithub } from "../controllers/loginWithGithub.js";
 import { secret, expires, rounds } from '../auth.js';
 import passport from 'passport';
 import jwt from 'jsonwebtoken';
@@ -13,6 +14,15 @@ router.post("/signup", signup);
 router.post("/signin", signin);
 
 router.post("/google", loginWithGoogle);
+
+
+//LAS SIGUIENTES DOS RUTAS VIENEN DEL ANTIGUO API
+
+router.get("/login/github/callback", loginWithGithub);
+
+router.post('/logout', logout);
+
+//TERMIAN AQUI
 
 router.get("/login/success", (req, res) => {
   if (req.user) {
@@ -34,7 +44,6 @@ router.get("/login/failed", (req, res) => {
   });
 });
 
-// router.get("/logout", logout);
 
 router.get("/logout", (req, res) => {
   req.logout();

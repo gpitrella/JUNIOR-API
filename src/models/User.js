@@ -8,7 +8,8 @@ const UserSchema = new mongoose.Schema(
     email: { type: String, required: true, unique: true, trim: true },
     password: { type: String, required: true },
     date: { type: Date, default: Date.now },
-    projects: [{type: Schema.Types.ObjectId, ref: 'Project'}],
+    projects: [{type: Schema.Types.ObjectId, ref: 'Project'}], 
+
     //miscolaboraciones:{
       //id de proyectos en los que colaboro
     //},

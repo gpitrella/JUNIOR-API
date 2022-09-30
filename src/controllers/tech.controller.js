@@ -2,7 +2,6 @@ import Tech from "../models/Tech.js";
 
 export const createNewTech = async (req, res) => {
   const { name } = req.body;
-  console.log(name)
   const errors = [];
   if (!name) {
     errors.push({ text: "Please Write a Tech's Name." });
