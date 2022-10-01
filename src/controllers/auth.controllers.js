@@ -14,9 +14,9 @@ export const signin = async (req, res) => {
       const { email, password } = req.body;
       const userFound = await User.findOne({ email: email });
       if (!userFound) {
-            res.status(404).json({ msg: "User with this email not found" });
+            res.status(404).json({ msg: "Email's User was not found" });
       } else {
-          if (compareSync(password, userFound.password)) {
+          if (compareSync(password, userFound.password)) {  
             // Creamos el token
             let token = jwt.sign({ user: userFound }, secret, {expiresIn: expires});
             res.json({
@@ -36,12 +36,12 @@ export const signin = async (req, res) => {
 
 export const signup = async (req, res) => {
   try {
-      const { name, email, password, confirm_password } = req.body;
+      const { name, email, password, confirm_password, image } = req.body; 
       if (password !== confirm_password) {
         res.status(401).json({ msg: "Passwords do not match." })
       }
       if (password.length < 4) {
-        res.status(401).json({ msg: "Incorrect length password" })
+        res.status(401).json({ msg: "Incorrect length password" }) 
       }
       // Look for email coincidence
       const userFound = await User.findOne({ email: email });
@@ -52,7 +52,7 @@ export const signup = async (req, res) => {
         // Saving a New User
         console.log(password, rounds)
         let hpassword = hashSync(password, Number.parseInt(rounds))
-        const newUser = new User({ name, email, password: hpassword });
+        const newUser = new User({ name, email, password: hpassword, image });
         console.log(newUser)
         await newUser.save();
         // newUser.password = await newUser.encryptPassword(password);

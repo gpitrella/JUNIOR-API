@@ -1,17 +1,91 @@
 export const techsjson = [
     {
-        "name": "c500ee"
+        "name": "C",
     },
     {
-        "name": "c1000ee"
+        "name": "Python",
+    },
+    {
+        "name": "C++",
+    },
+    {
+        "name": "React",
+    },
+    {
+        "name": "Postgres",
+    },
+    {
+        "name": "MongoDB",
+    },
+]
+
+export const projectsjson = [
+    {
+        "title": "JUNIOR",
+        "description": "proyecto grande",
+        "gitHubUrl": "sinruta",
+        "wspUrl": "tampoco",
+        "newtech": [
+                "C",
+                "Python"
+            ],
+        "payment": true,
+        "userId": "63365944ba91504b94953c98",
+        "image": "nohay.jpg",
+        "status": "develop"
+    },
+    {
+        "title": "Fakebook",
+        "description": "proyecto grande",
+        "gitHubUrl": "sinruta",
+        "wspUrl": "tampoco",
+        "newtech": [
+                "Javascript",
+                "Python"
+            ],
+        "payment": true,
+        "userId": "63365944ba91504b94953c98",
+        "image": "nohay.jpg",
+        "status": "develop"
     }
 ]
 
-// export const projectsjson = [
-//     {
-//         "name": "c500ee"
-//     },
-//     {
-//         "name": "c1000ee"
-//     }
-// ]
+export const usersjson = [
+    {
+        "name": "Joan",
+        "email": "joan.quispe@gmail.com",
+        "password": "123456",
+        "date": "30/09/2022",
+        "projects": [
+                
+            ],
+        "collaborations": [
+                
+        ],
+        "github": "63365944ba91504b94953c98.com",
+        "puntaje": 0,
+    },
+    {
+        "title": "Fakebook",
+        "description": "proyecto grande",
+        "gitHubUrl": "sinruta",
+        "wspUrl": "tampoco",
+        "newtech": [
+                "Javascript",
+                "Python"
+            ],
+        "payment": true,
+        "userId": "63365944ba91504b94953c98",
+        "image": "nohay.jpg",
+        "status": "develop"
+    }
+]
+
+export const signinjson = [
+    {
+        "name": "joan",
+        "email": "joan.quispe@gmail.com",
+        "password": "123456",
+        "confirm_password": "123456"
+    }
+] 
