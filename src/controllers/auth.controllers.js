@@ -36,12 +36,12 @@ export const signin = async (req, res) => {
 
 export const signup = async (req, res) => {
   try {
-      const { name, email, password, confirm_password, image } = req.body;
+      const { name, email, password, confirm_password, image } = req.body; 
       if (password !== confirm_password) {
         res.status(401).json({ msg: "Passwords do not match." })
       }
       if (password.length < 4) {
-        res.status(401).json({ msg: "Incorrect length password" })
+        res.status(401).json({ msg: "Incorrect length password" }) 
       }
       // Look for email coincidence
       const userFound = await User.findOne({ email: email });

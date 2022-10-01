@@ -27,6 +27,8 @@ export const userCollaborations = async (req,res)=>{
   let {idProject, idUser, linkedin, number, text, email} = req.body 
   const message = "you must complete the required fields"
   if(!idProject && !idUser && !linkedin && !number && !text && !email) res.status(400).json({message})
+  const regExpLiteral = /http(s)?:\/\/([\w]+\.)?linkedin\.com\/in\/[A-z0-9_-]+\/?/gim
+  console.log(linkedin.match(regExpLiteral))
 try {
   let project = await Project.findById(idProject)
   let collabsProject = project.collaborators.map(async m => await Collaborator.findById(m))

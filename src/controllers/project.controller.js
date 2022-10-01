@@ -1,6 +1,7 @@
 import Project from "../models/Project.js";
 import Tech from "../models/Tech.js";
 import User from "../models/User.js";
+import {ObjectId} from "mongodb"
 
 export const createNewProject = async (req, res) => {
   try {
@@ -23,10 +24,26 @@ export const createNewProject = async (req, res) => {
     }
     else {
       const findInDb = await Project.findOne({ title: title })
-      console.log(findInDb)
-      if (!findInDb) {
-        const techs = newtech.map(f => f.toLowerCase())
-        const newProject = new Project({ title, description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status });
+      let userFound = await User.findOne({"_id": ObjectId(userId)}).then(result=>{ 
+        // return console.log("horrorx2", result);
+        if (typeof result === "undefined") {
+          throw new Error(message)
+          return res.status(404).json("User not founded")
+        }
+         
+     }).catch(err=>{
+         return res.sendStatus(500).send({
+             message:err.message|| "some error occured"
+         });
+         
+     })
+     console.log(userFound)
+      if (!findInDb||userFound) {
+        const techs = newtech.map(f => f.toLowerCase()) 
+        const message = "User not founded";
+      
+        
+        const newProject = new Project({ title, description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status });  
         const saveProject = await newProject.save();
         const mapName = saveProject.tech.map(m => m)
         mapName.forEach(async m => {
@@ -35,22 +52,24 @@ export const createNewProject = async (req, res) => {
           }
         })
         await User.findByIdAndUpdate(userId, { $push: { 'projects': saveProject._id } })
-        res.status(200).json(saveProject)
+        return res.status(200).json(saveProject)
+        
       } else {
-        res.status(400).json({ error: `the project with title ${title.toUpperCase()} already exist` })
+        if(!userFound) return res.status(400).json({ error: "User not found"})
+        return res.status(400).json({ error: `the project with title ${title.toUpperCase()} already exist` })
       }
     }
   } catch (err) {
-    res.status(400).json(err.message)
+    return res.status(400).json(err.message)
   }
 }
 
 export const getAllProyect = async (req, res) => {
   try {
     const findInDb = await Project.find({}).sort( { createdAt: 1, "_id": 1 } )
-    res.status(200).json(findInDb)
+    return res.status(200).json(findInDb)
   } catch (err) {
-    res.status(400).json(err.message)
+    return res.status(400).json(err.message)
   }
 }
 
@@ -85,14 +104,14 @@ export const updateProject = async (req, res) => {
             await Tech.create({ name: m })
           }
         })
-        res.status(200).json(`${saveProject.title} update successfully`)
+        return res.status(200).json(`${saveProject.title} update successfully`)
       }
       else {
-        res.status(400).json({ error: `the project with title ${title.toUpperCase()} already exist` })
+        return res.status(400).json({ error: `the project with title ${title.toUpperCase()} already exist` })
       }
     }
   } catch (error) {
-    res.status(400).json(error.message)
+    return res.status(400).json(error.message)
   }
 }
 
@@ -100,8 +119,8 @@ export const projectDelete = async (req, res) => {
   try {
     const { id } = req.body
     await Project.findByIdAndDelete({ _id: id })
-    res.status(200).send('The project was successfully removed')
+    return res.status(200).send('The project was successfully removed')
   } catch (error) {
-    res.status(400).json(error.message)
+    return res.status(400).json(error.message)
   }
 }

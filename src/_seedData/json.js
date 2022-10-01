@@ -81,3 +81,11 @@ export const usersjson = [
     }
 ]
 
+export const signinjson = [
+    {
+        "name": "joan",
+        "email": "joan.quispe@gmail.com",
+        "password": "123456",
+        "confirm_password": "123456"
+    }
+] 
