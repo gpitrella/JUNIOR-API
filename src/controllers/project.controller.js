@@ -24,40 +24,33 @@ export const createNewProject = async (req, res) => {
     }
     else {
       const findInDb = await Project.findOne({ title: title })
-      let userFound = await User.findOne({"_id": ObjectId(userId)}).then(result=>{ 
-        // return console.log("horrorx2", result);
-        if (typeof result === "undefined") {
-          throw new Error(message)
+      console.log(findInDb)
+      await User.findOne({"_id": ObjectId(userId)}).then(async result=>{ 
+        if ( result === null) {
+          //throw new Error(message)
           return res.status(404).json("User not founded")
+        }else if(!findInDb){
+          const techs = newtech.map(f => f.toLowerCase()) 
+          const newProject = new Project({ title, description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status });  
+          const saveProject = await newProject.save();
+          const mapName = saveProject.tech.map(m => m)
+          mapName.forEach(async m => {
+            if (!await Tech.findOne({ name: m })) {
+              await Tech.create({ name: m })
+            }
+          })
+          await User.findByIdAndUpdate(userId, { $push: { 'projects': saveProject._id } })
+          return res.status(200).json(saveProject)
+        } else {
+          return res.status(400).json({ error: `the project with title ${title.toUpperCase()} already exist` })
         }
-         
      }).catch(err=>{
          return res.sendStatus(500).send({
              message:err.message|| "some error occured"
          });
          
      })
-     console.log(userFound)
-      if (!findInDb||userFound) {
-        const techs = newtech.map(f => f.toLowerCase()) 
-        const message = "User not founded";
       
-        
-        const newProject = new Project({ title, description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status });  
-        const saveProject = await newProject.save();
-        const mapName = saveProject.tech.map(m => m)
-        mapName.forEach(async m => {
-          if (!await Tech.findOne({ name: m })) {
-            await Tech.create({ name: m })
-          }
-        })
-        await User.findByIdAndUpdate(userId, { $push: { 'projects': saveProject._id } })
-        return res.status(200).json(saveProject)
-        
-      } else {
-        if(!userFound) return res.status(400).json({ error: "User not found"})
-        return res.status(400).json({ error: `the project with title ${title.toUpperCase()} already exist` })
-      }
     }
   } catch (err) {
     return res.status(400).json(err.message)
