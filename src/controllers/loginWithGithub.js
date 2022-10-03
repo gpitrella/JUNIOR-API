@@ -6,8 +6,8 @@ import jwt from 'jsonwebtoken';
 import dotenv from "dotenv";
 dotenv.config()
 
-const client_id = process.env.GITHUB_CLIENT_ID;
-const client_secret = process.env.GITHUB_CLIENT_SECRET;
+const client_id = process.env.CLIENT_ID_GITHUB;
+const client_secret = process.env.CLIENT_SECRET_GITHUB;
 
 export const loginWithGithub = async (req, res) => {
     const code = req.query.code;

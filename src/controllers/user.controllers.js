@@ -14,7 +14,7 @@ export const AllUsers = async (req,res)=>{
 export const userProjects = async (req, res)=>{
     let {id} = req.body
     let getMyProjects = await User.findById(id)
-    console.log(getMyProjects.projects.length)
+    console.log('PROJECTOS POR ID:', getMyProjects)
     if (getMyProjects.projects.length){
         let projets = getMyProjects.projects.map(async m => await Project.findById(m))
         const resPromises = await Promise.all(projets)
