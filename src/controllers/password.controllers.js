@@ -7,16 +7,18 @@ import { transporter } from "../helpers/mailer.js";
 import { token } from 'morgan';
 dotenv.config()
 
-const CLIENT_URL = process.env.CLIENT_URL;
 export const recoverPassword = async(req,res)=>{
+    const CLIENT_URL = process.env.CLIENT_URL;
     const { email } = req.body
+    let token;
+    let findUser;
     try {        
         if(!email){
             throw new Error('E-mail is required!')
         }
-        let findUser = await User.findOne({ email })
+        findUser = await User.findOne({ email })
         if(!findUser) throw new Error('User not found!');
-        let token = jwt.sign({ usermail: findUser.email, id: findUser._id }, secret, {expiresIn: expires});
+        token = jwt.sign({ usermail: findUser.email, id: findUser._id }, secret, {expiresIn: expires});
         findUser.token = token
 
         await findUser.save()
