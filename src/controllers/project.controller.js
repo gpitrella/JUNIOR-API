@@ -44,11 +44,23 @@ export const createNewProject = async (req, res) => {
     res.status(400).json(err.message)
   }
 }
-
 export const getAllProyect = async (req, res) => {
   try {
     const findInDb = await Project.find({}).sort( { createdAt: 1, "_id": 1 } )
     res.status(200).json(findInDb)
+  } catch (err) {
+    res.status(400).json(err.message)
+  }
+}
+
+export const getProjectById = async (req, res) => {
+  try {
+    const { id } = req.params
+    console.log(req.params)
+    console.log(id, 'en project controller')
+    const findProjectDb = await Project.findById(id)
+    console.log(findProjectDb)
+    res.status(200).json(findProjectDb)
   } catch (err) {
     res.status(400).json(err.message)
   }
@@ -95,7 +107,6 @@ export const updateProject = async (req, res) => {
     res.status(400).json(error.message)
   }
 }
-
 export const projectDelete = async (req, res) => {
   try {
     const { id } = req.body
