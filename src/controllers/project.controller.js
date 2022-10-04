@@ -1,6 +1,7 @@
 import Project from "../models/Project.js";
 import Tech from "../models/Tech.js";
 import User from "../models/User.js";
+import Collaborator from "../models/Collaborator.js";
 import {ObjectId} from "mongodb"
 
 export const createNewProject = async (req, res) => {
@@ -65,7 +66,20 @@ export const getProjectById = async (req, res) => {
   try {
     const {id} = req.params
     const findProjectDb = await Project.findById(id)
+
     return res.status(200).json(findProjectDb)
+  } catch (error) {
+    return res.status(400).json(error.message)
+  }
+}
+
+export const getProjectCollaborator = async (req, res) => {
+  try{
+      const {id} = req.params
+      const findProjectDb = await Project.findById(id)
+      const collaborator = findProjectDb.collaborators.map(async elem => await Collaborator.findById(elem))
+      const respromise = await Promise.all(collaborator)
+      res.status(200).json(respromise)
   } catch (error) {
     return res.status(400).json(error.message)
   }
