@@ -2,21 +2,17 @@ import User from "../models/User.js";
 import { compareSync, hashSync } from 'bcrypt';
 import { secret, expires, rounds } from '../auth.js';
 import jwt from 'jsonwebtoken';
-import passport from 'passport';
 import { config } from "dotenv";
 config();
-
-const CLIENT_URL = process.env.CLIENT_URL
-// require('dotenv').config();
 
 export const signin = async (req, res) => {
   try {
       const { email, password } = req.body;
       const userFound = await User.findOne({ email: email });
       if (!userFound) {
-            res.status(404).json({ msg: "User with this email not found" });
+         throw new Error("Wrong Email or Password");
       } else {
-          if (compareSync(password, userFound.password)) {
+          if (compareSync(password, userFound.password)) {  
             // Creamos el token
             let token = jwt.sign({ user: userFound }, secret, {expiresIn: expires});
             res.json({
@@ -26,34 +22,34 @@ export const signin = async (req, res) => {
             })
           } else {
             // Unauthorized Access
-            res.status(401).json({ msg: "Incorrect password" }) 
+            throw new Error("Wrong Email or Password");
         }        
       }
   } catch (err) { 
-      res.status(500).json(err);
+      res.status(404).json(err.message);
   }
 }
 
 export const signup = async (req, res) => {
   try {
-      const { name, email, password, confirm_password } = req.body;
+      const { name, email, password, confirm_password, image } = req.body; 
       if (password !== confirm_password) {
-        res.status(401).json({ msg: "Passwords do not match." })
+        throw new Error("Passwords do not match.")
       }
       if (password.length < 4) {
-        res.status(401).json({ msg: "Incorrect length password" })
+        throw new Error("Incorrect length password")
       }
+
       // Look for email coincidence
       const userFound = await User.findOne({ email: email });
-      console.log(userFound)
       if (userFound) {
-        res.status(404).json({ msg: "Email already used" });
+        throw new Error("Email already used")
+        // res.status(404).json({ msg: "Email already used" });
       } else {
         // Saving a New User
-        console.log(password, rounds)
         let hpassword = hashSync(password, Number.parseInt(rounds))
-        const newUser = new User({ name, email, password: hpassword });
-        console.log(newUser)
+        const newUser = new User({ name, email, password: hpassword, image });
+        
         await newUser.save();
         // newUser.password = await newUser.encryptPassword(password);
         let token = jwt.sign({ user: newUser }, secret, {expiresIn: expires});
@@ -66,7 +62,7 @@ export const signup = async (req, res) => {
       }
         
     } catch (err) { 
-        res.status(500).json(err);
+        res.status(404).json(err.message);
     }
 };
 
@@ -77,4 +73,3 @@ export const logout = async (req, res) => {
       success: true
   })
 };
-

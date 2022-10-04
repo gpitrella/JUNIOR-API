@@ -10,13 +10,14 @@ const UserSchema = new mongoose.Schema(
     date: { type: Date, default: Date.now },
     projects: [{type: Schema.Types.ObjectId, ref: 'Project'}], 
     collaborations:[{type: Schema.Types.ObjectId, ref: 'Project'}],
-    github:{type: String, required: true},
-    puntaje:{type: Number},
+    github:{type: String },
+    puntaje:{type: Number, default:0},
     image:{
       type: String,
       default: "https://res.cloudinary.com/djgghmpgh/image/upload/v1663680302/CITYPNG.COM_HD_Profile_User_Round_Green_Icon_Symbol_Transparent_PNG_-_1074x1074_ih1sas.png"
     },
     token:{type: String, default:"token"},
+    linkedin:{type: String, default:"no especificado"}
   },
   {
     timestamps: false,

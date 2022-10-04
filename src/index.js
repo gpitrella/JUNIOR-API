@@ -4,5 +4,5 @@ import { PORT } from "./config.js";
 
 app.listen(app.get('port'), async () => {
     await connectDB()
-    console.log(`Example app listening on port ${PORT}`)
+    console.log(`JUNIOR APP listening on port ${PORT}`)
 })

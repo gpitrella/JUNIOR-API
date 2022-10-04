@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { secret } from '../auth.js';
 import User from '../models/User.js';
+
 export default (req,res,next)=>{
     //comprobar la existencia del token
     if(!req.headers.authorization){

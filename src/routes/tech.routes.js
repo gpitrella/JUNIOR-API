@@ -1,6 +1,10 @@
 import { Router } from "express";
-import {createNewTech, deleteTech, getAllTech} from "../controllers/tech.controller.js";
-import auth from "../helpers/auth.js";
+import {
+    createNewTech,
+    deleteTech,
+    getAllTech,
+} from "../controllers/tech.controller.js";
+//import { isAuthenticated } from "../helpers/auth.js";
 
 
 const router = Router();

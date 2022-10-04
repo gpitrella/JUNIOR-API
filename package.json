@@ -1,33 +1,35 @@
 {
-  "name": "junior-api",
-  "version": "1.0.0",
-  "description": "",
+  "name": "nodejs-junior-app",
+  "version": "2.0.0",
+  "description": "JUNIOR App",
   "main": "index.js",
   "type": "module",
+  "scripts": {
+    "dev": "nodemon src/index.js",
+    "start": "node src/index.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
     "axios": "^0.27.2",
     "bcrypt": "^5.0.1",
     "bcryptjs": "^2.4.3",
-    "body-parser": "^1.20.0",
-    "cors": "^2.8.5",
-    "daemon": "^1.1.0",
-    "dotenv": "^16.0.2",
+    "connect-flash": "^0.1.1",
+    "connect-mongo": "^4.6.0",
     "express": "^4.18.1",
-    "init": "^0.1.2",
+    "express-handlebars": "^6.0.6",
+    "express-session": "^1.17.3",
     "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.6.2",
+    "method-override": "^3.0.0",
+    "mongoose": "^6.3.6",
+    "mongoose-findorcreate": "^3.0.0",
     "morgan": "^1.10.0",
-    "nodemailer": "^6.8.0",
-    "nodemon": "^2.0.20",
-    "passport": "^0.6.0",
-    "path": "^0.12.7"
+    "nodemailer": "^6.8.0"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon src/index.js",
-    "seed:local": "node src/_seedData/seedData.js"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC"
+  "devDependencies": {
+    "dotenv": "^16.0.1",
+    "handlebars": "^4.7.7",
+    "nodemon": "^2.0.16"
+  }
 }
