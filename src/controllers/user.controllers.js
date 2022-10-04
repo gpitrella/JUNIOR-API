@@ -14,10 +14,7 @@ export const AllUsers = async (req,res)=>{
 export const getUserById = async (req, res) => {
   try {
     const { id } = req.params
-    console.log(req.params)
-    console.log(id, 'en user controller')
     const findUserDb = await User.findById(id)
-    console.log(findUserDb)
     res.status(200).json(findUserDb)
   } catch (err) {
     res.status(400).json(err.message)

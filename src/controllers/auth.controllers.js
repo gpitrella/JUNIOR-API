@@ -49,7 +49,7 @@ export const signup = async (req, res) => {
         // Saving a New User
         let hpassword = hashSync(password, Number.parseInt(rounds))
         const newUser = new User({ name, email, password: hpassword, image });
-        console.log(newUser)
+        
         await newUser.save();
         // newUser.password = await newUser.encryptPassword(password);
         let token = jwt.sign({ user: newUser }, secret, {expiresIn: expires});

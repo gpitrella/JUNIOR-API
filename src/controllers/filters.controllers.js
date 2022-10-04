@@ -22,13 +22,6 @@ export const filterByTechs = async (req,res)=>{
         if (errors.length > 0) {
             return res.send(errors)
         } else {
-            
-            
-            // // Order
-            // let queryParameters = setQueryParameters(order, orderby)
-            // console.log('Data que viene de función setQueryParameters', queryParameters)
-            // let projectOrdered = await Project.findAndCountAll(queryParameters)
-            // console.log('Projectos ordenados:', projectOrdered)
 
             // Filter by Tech
             const projects = await Project.find({}).sort( { [order]: orderby, "_id": 1 } )
