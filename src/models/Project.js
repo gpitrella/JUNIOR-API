@@ -39,7 +39,13 @@ const ProjectSchema = new mongoose.Schema(
       enum: ['develop','finish'],
       default: 'develop'
     },
-    collaborators: [{type: Schema.Types.ObjectId, ref: 'Collaborator'}]
+    collaborators: [
+      {type: Schema.Types.ObjectId, ref: 'Collaborator'}
+    ],
+    emailUser:{
+      type:String,
+      required: true
+    }
   },
   {
     timestamps: true,
