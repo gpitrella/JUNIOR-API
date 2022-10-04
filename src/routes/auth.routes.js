@@ -18,9 +18,9 @@ router.post("/google", loginWithGoogle);
 
 //LAS SIGUIENTES DOS RUTAS VIENEN DEL ANTIGUO API
 
-router.get("/login/github/callback", loginWithGithub);
+// router.get("/login/github/callback", loginWithGithub);
 
-router.post('/logout', logout);
+// router.post('/logout', logout);
 
 //TERMIAN AQUI
 

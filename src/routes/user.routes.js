@@ -5,7 +5,6 @@ import auth from "../helpers/auth.js";
 const router = Router();
 
 router.get("/allusers", AllUsers)
-// router.post("/projects", auth ,userProjects)
 router.post("/projects", userProjects)
 router.post("/collaboration",userCollaborations)
 

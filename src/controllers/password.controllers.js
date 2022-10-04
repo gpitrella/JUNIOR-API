@@ -35,7 +35,7 @@ export const recoverPassword = async(req,res)=>{
             text: "Hello. This email is for your email verification.",
             html:`
                 <b>Please click on the following link:</b>
-                <a href="https://enzos-portfolio-react.vercel.app/${token}">href="https://enzos-portfolio-react.vercel.app/${token}</a>
+                <a href="https://enzos-portfolio-react.vercel.app/${token}">href="https://enzos-portfolio-react.vercel.app/</a>
             `
         });
     } catch (error) {
@@ -46,7 +46,7 @@ export const newPassword = async(req,res)=>{
     try {   
         const {newPassword} = req.body
         const token = req.headers
-        if(!token && newPassword===0) res.status(400).json({message: 'All the fields are required'})
+        if(!token && newPassword===0) throw new Error('All the fields are required')
         let tokenverify= jwt.verify(token.token, secret)
         //let finduser= await User.findById(tokenverify.id)
         //if(compareSync(newPassword, finduser.password)) res.status(400).json({message:'ya has utilizado esta contraseña antes, prueba con otra...'})
