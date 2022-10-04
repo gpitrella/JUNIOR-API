@@ -10,7 +10,6 @@ dotenv.config()
 const CLIENT_URL = process.env.CLIENT_URL;
 export const recoverPassword = async(req,res)=>{
     const { email } = req.body
-    console.log('EMAIL:',email);
     const message = 'Check your email for a link to reset your password.';
     let token;
     let findUser;
