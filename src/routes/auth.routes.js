@@ -13,6 +13,6 @@ router.post("/google", loginWithGoogle);
 
 router.get("/login/github/callback", loginWithGithub);
 
-router.post('/logout', logout);
+router.get("/logout", logout);
 
 export default router;
