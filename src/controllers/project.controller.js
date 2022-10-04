@@ -63,9 +63,12 @@ export const getAllProyect = async (req, res) => {
 
 export const getProjectById = async (req, res) => {
   try {
-    const {id} = req.body
-    const findProjects = await Project.findById(id)
-    return res.status(200).json(findProjects)
+    const {id} = req.params
+    console.log(req.params)
+    console.log(id, 'en project controller')
+    const findProjectDb = await Project.findById(id)
+    console.log(findProjectDb)
+    return res.status(200).json(findProjectDb)
   } catch (error) {
     return res.status(400).json(error.message)
   }
