@@ -7,21 +7,22 @@ import { transporter } from "../helpers/mailer.js";
 
 dotenv.config()
 
+const CLIENT_URL = process.env.CLIENT_URL;
 export const recoverPassword = async(req,res)=>{
-    const {email} = req.body
-    if(!email){
-        throw new Error('email is required!')
-    }
+    const { email } = req.body
+    console.log('EMAIL:',email);
     const message = 'Check your email for a link to reset your password.';
     let token;
     let findUser;
     try {
+        if(!email){
+            throw new Error('email is required!')
+        }
         findUser = await User.findOne({email})
-        if(!findUser) throw new Error(message);
+        if(!findUser) throw new Error('User not found');
         token = jwt.sign({ usermail: findUser.email, id: findUser._id }, secret, {expiresIn: expires});
         findUser.token=token
         await findUser.save()
-        res.status(200).json({message:message})
         try {
             // send mail with defined transport object
             await transporter.sendMail({
@@ -30,10 +31,11 @@ export const recoverPassword = async(req,res)=>{
                 subject: "Recover Password", // Subject line
                 text: "Hello. This email is for your email verification.",
                 html:`
-                    <b>Please click on the following link:</b>
-                    <a href=${CLIENT_URL}/updatepassword/?token=${token}">Click para Recuperar Contraseña</a>
+                <b>Please click on the following link:</b>
+                <a href=${CLIENT_URL}/newpassword/?token=${token}">Click para Recuperar Contraseña</a>
                 `
             });
+            res.status(200).json({message:message})
         } catch (error) {
             res.status(400).json(error.message)
         }
@@ -52,7 +54,7 @@ export const newPassword = async(req,res)=>{
         let hpassword = hashSync(newPassword, Number.parseInt(rounds))
         let user = await User.findByIdAndUpdate( tokenverify.id,{password:hpassword})
         await user.save()
-        res.json('newpassword'+newPassword)
+        res.json('newpassword' + newPassword)
     } catch (error) {
         res.status(400).json(error.message)
     }
