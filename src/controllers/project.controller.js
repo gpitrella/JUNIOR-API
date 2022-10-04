@@ -24,7 +24,6 @@ export const createNewProject = async (req, res) => {
     }
     else {
       const findInDb = await Project.findOne({ title: title.toLowerCase() })
-      console.log(findInDb)
       await User.findOne({"_id": ObjectId(userId)}).then(async result=>{ 
         if ( result === null) {
           throw new Error("User not founded")
