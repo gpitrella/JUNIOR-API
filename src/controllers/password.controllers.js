@@ -10,19 +10,16 @@ dotenv.config()
 export const recoverPassword = async(req,res)=>{
     const {email} = req.body
     if(!email){
-        res.status(400).json({message: 'mail is required!'})
+        throw new Error({message: 'email is required!'})
     }
-    let token;
-    let findUser;
     const message = 'Check your email for a link to reset your password.';
     try {
-
-        findUser = await User.findOne({email})
+        let findUser = await User.findOne({email})
         if(!findUser) throw new Error(message);
-        token = jwt.sign({ usermail: findUser.email, id: findUser._id }, secret, {expiresIn: expires});
+        let token = jwt.sign({ usermail: findUser.email, id: findUser._id }, secret, {expiresIn: expires});
         findUser.token=token
         await findUser.save()
-        res.json({message:message})
+        res.status(200).json({message:message})
     } catch (error) {
         res.status(400).json(error.message)
     }
