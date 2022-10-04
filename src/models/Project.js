@@ -44,7 +44,7 @@ const ProjectSchema = new mongoose.Schema(
     ],
     emailUser:{
       type:String,
-      require: true
+      required: true
     }
   },
   {

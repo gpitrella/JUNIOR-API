@@ -5,7 +5,7 @@ import {ObjectId} from "mongodb"
 
 export const createNewProject = async (req, res) => {
   try {
-    const { title, description, gitHubUrl, wspUrl, image, newtech, userId, payment, status } = req.body;
+    const { title, description, gitHubUrl, wspUrl, image, newtech, userId, payment, status, emailUser } = req.body;
     const errors = [];
     if (!title) {
       errors.push({ text: "Please Write a Title." });
@@ -30,7 +30,7 @@ export const createNewProject = async (req, res) => {
           throw new Error("User not founded")
         }else if(!findInDb){
           const techs = newtech.map(f => f.toLowerCase()) 
-          const newProject = new Project({ title:title.toLowerCase(), description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status });  
+          const newProject = new Project({ title:title.toLowerCase(), description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status, emailUser });  
           const saveProject = await newProject.save();
           const mapName = saveProject.tech.map(m => m)
           mapName.forEach(async m => {
