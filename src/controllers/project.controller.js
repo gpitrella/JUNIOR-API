@@ -51,7 +51,6 @@ export const createNewProject = async (req, res) => {
     return res.status(400).json(error.message)
   }
 }
-
 export const getAllProyect = async (req, res) => {
   try {
     const findInDb = await Project.find({}).sort( { createdAt: 1, "_id": 1 } )
@@ -63,9 +62,9 @@ export const getAllProyect = async (req, res) => {
 
 export const getProjectById = async (req, res) => {
   try {
-    const {id} = req.body
-    const findProjects = await Project.findById(id)
-    return res.status(200).json(findProjects)
+    const {id} = req.params
+    const findProjectDb = await Project.findById(id)
+    return res.status(200).json(findProjectDb)
   } catch (error) {
     return res.status(400).json(error.message)
   }
@@ -113,7 +112,6 @@ export const updateProject = async (req, res) => {
     return res.status(400).json(error.message)
   }
 }
-
 export const projectDelete = async (req, res) => {
   try {
     const { id } = req.body

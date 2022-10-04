@@ -11,6 +11,16 @@ export const AllUsers = async (req,res)=>{
   }
 }
 
+export const getUserById = async (req, res) => {
+  try {
+    const { id } = req.params
+    const findUserDb = await User.findById(id)
+    res.status(200).json(findUserDb)
+  } catch (err) {
+    res.status(400).json(err.message)
+  }
+}
+
 export const userProjects = async (req, res)=>{
     let { id } = req.body
     let getMyProjects = await User.findById(id)
