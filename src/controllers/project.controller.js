@@ -71,19 +71,6 @@ export const getProjectById = async (req, res) => {
   }
 }
 
-export const getProjectById = async (req, res) => {
-  try {
-    const { id } = req.params
-    console.log(req.params)
-    console.log(id, 'en project controller')
-    const findProjectDb = await Project.findById(id)
-    console.log(findProjectDb)
-    res.status(200).json(findProjectDb)
-  } catch (err) {
-    res.status(400).json(err.message)
-  }
-}
-
 export const updateProject = async (req, res) => {
   try {
     const { title, description, gitHubUrl, wspUrl, image, newtech, projectId } = req.body;
