@@ -7,22 +7,20 @@ import { transporter } from "../helpers/mailer.js";
 import { token } from 'morgan';
 dotenv.config()
 
+const CLIENT_URL = process.env.CLIENT_URL;
 export const recoverPassword = async(req,res)=>{
-    const {email} = req.body
-    if(!email){
-        res.status(400).json({message: 'mail is required!'})
-    }
-    let token;
-    let findUser;
-    const message = 'Check your email for a link to reset your password.';
-    try {
+    const { email } = req.body
+    try {        
+        if(!email){
+            throw new Error('E-mail is required!')
+        }
+        let findUser = await User.findOne({ email })
+        if(!findUser) throw new Error('User not found!');
+        let token = jwt.sign({ usermail: findUser.email, id: findUser._id }, secret, {expiresIn: expires});
+        findUser.token = token
 
-        findUser = await User.findOne({email})
-        if(!findUser) throw new Error(message);
-        token = jwt.sign({ usermail: findUser.email, id: findUser._id }, secret, {expiresIn: expires});
-        findUser.token=token
         await findUser.save()
-        res.json({message:message})
+        res.send({ message: 'Check your email for a link to reset your password.'})
     } catch (error) {
         res.status(400).json(error.message)
     }
@@ -35,7 +33,7 @@ export const recoverPassword = async(req,res)=>{
             text: "Hello. This email is for your email verification.",
             html:`
                 <b>Please click on the following link:</b>
-                <a href="https://enzos-portfolio-react.vercel.app/${token}">href="https://enzos-portfolio-react.vercel.app/${token}</a>
+                <a href=${CLIENT_URL}/updatepassword/?token=${token}">Click para Recuperar Contraseña</a>
             `
         });
     } catch (error) {
