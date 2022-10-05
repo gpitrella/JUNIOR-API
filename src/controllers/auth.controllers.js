@@ -67,9 +67,9 @@ export const signup = async (req, res) => {
 };
 
 
-export const logout = async (req, res) => {
-  if (req.logout) req.logout();
-    res.status(201).json({
-      success: true
-  })
-};
+// export const logout = async (req, res) => {
+//   if (req.logout) req.logout();
+//     res.status(201).json({
+//       success: true
+//   })
+// };

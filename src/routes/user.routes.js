@@ -6,7 +6,7 @@ const router = Router();
 
 router.get("/allusers",AllUsers);
 router.get("/:id", getUserById);
-router.post("/projects", auth ,userProjects);
+router.post("/projects", auth, userProjects);
 router.post("/collaboration",userCollaborations)
 router.post("/mycollaborations", MyCollaborations)
 

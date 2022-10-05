@@ -1,6 +1,6 @@
 import { Router } from "express";
 const router = Router();
-import { signup, signin, logout } from "../controllers/auth.controllers.js";
+import { signup, signin } from "../controllers/auth.controllers.js";
 import { loginWithGoogle } from "../controllers/loginWithGoogle.js";
 import { loginWithGithub } from "../controllers/loginWithGithub.js";
 
@@ -13,6 +13,6 @@ router.post("/google", loginWithGoogle);
 
 router.get("/login/github/callback", loginWithGithub);
 
-router.get("/logout", logout);
+// router.get("/logout", logout);
 
 export default router;
