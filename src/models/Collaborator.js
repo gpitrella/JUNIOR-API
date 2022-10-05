@@ -6,6 +6,10 @@ const CollaboratorSchema = new mongoose.Schema(
         type: Schema.Types.ObjectId, 
         ref: 'User'
     },
+    name:{
+      type:String,
+      required:true
+    },
     linkedin: {
         type: String,
         required: true,

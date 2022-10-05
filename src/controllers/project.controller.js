@@ -2,6 +2,7 @@ import Project from "../models/Project.js";
 import Tech from "../models/Tech.js";
 import User from "../models/User.js";
 import {ObjectId} from "mongodb"
+import Collaborator from "../models/Collaborator.js";
 
 export const createNewProject = async (req, res) => {
   try {
@@ -64,9 +65,25 @@ export const getAllProyect = async (req, res) => {
 
 export const getProjectById = async (req, res) => {
   try {
-    const {id} = req.body
+    const {id} = req.params  || req.body
     const findProjects = await Project.findById(id)
     return res.status(200).json(findProjects)
+  } catch (error) {
+    return res.status(400).json(error.message)
+  }
+}
+
+export const getCollaborator_project = async (req, res) =>{
+  const {id} = req.params || req.body
+  try {
+    const findProject = await Project.findById(id)
+    const collaborators = findProject.collaborators.map(async m => await Collaborator.findById(m))
+    const resCollaborators = await Promise.all(collaborators)
+    if(resCollaborators.length){
+      return res.status(200).json(resCollaborators)
+    } else{
+      throw new Error("Doesn't have collaborators")
+    }
   } catch (error) {
     return res.status(400).json(error.message)
   }

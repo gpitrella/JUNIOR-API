@@ -43,7 +43,7 @@ try {
   let user = await User.findById(idUser)
 
   if(project && user){
-    let newCollaborator = await Collaborator.create({idUser, linkedin, number, text, email})
+    let newCollaborator = await Collaborator.create({idUser, name: user.name, linkedin, number, text, email})
     let mycollaborations= await User.findByIdAndUpdate(idUser,{ $push: { 'collaborations': idProject } })
     await mycollaborations.save()
     let pendingcolaborators = await Project.findByIdAndUpdate(idProject,{ $push: { 'collaborators': newCollaborator._id } })
@@ -64,5 +64,15 @@ export const MyCollaborations = async (req,res)=>{
     res.json(resPromises)
   } else {
     res.status(404).send("you don't have any collaboration")
+  }
+}
+
+export const getUserBy_Id = async (req,res)=>{
+  let{id}=req.params
+  try{
+    let findUser = await User.findById(id)
+    return res.status(200).json(findUser)
+  }catch(error){
+    return res.status(400).json(error.message)
   }
 }

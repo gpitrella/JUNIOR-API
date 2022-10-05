@@ -22,7 +22,7 @@ export const recoverPassword = async(req,res)=>{
         token = jwt.sign({ usermail: findUser.email, id: findUser._id }, secret, {expiresIn: expires});
         findUser.token=token
         await findUser.save()
-        res.status(200).json({message:message})
+        res.status(200).json({message:message, token})
         try {
             // send mail with defined transport object
             await transporter.sendMail({
