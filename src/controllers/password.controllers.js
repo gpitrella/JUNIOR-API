@@ -44,7 +44,7 @@ export const recoverPassword = async(req,res)=>{
 }
 export const newPassword = async(req,res)=>{
     try {   
-        const {newPassword} = req.body
+        const { newPassword } = req.body
         const token = req.headers
         if(!token && newPassword===0) throw new Error('All the fields are required')
         let tokenverify= jwt.verify(token.token, secret)
