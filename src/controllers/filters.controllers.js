@@ -22,6 +22,8 @@ export const filterByTechs = async (req,res)=>{
         if (errors.length > 0) {
             return res.send(errors)
         } else {
+
+            // Filter by Tech
             const projects = await Project.find({}).sort( { [order]: orderby, "_id": 1 } )
             const _setfilter = new Set()
             if(teches[0] !== "All") {
@@ -45,34 +47,16 @@ export const filterByTechs = async (req,res)=>{
                 })
             }
 
-            // Filter by Payment
+            // Filter by Status
             if(status !== "All") {
                 _setfilter.forEach((project) => {
                     if(project.status !== status) _setfilter.delete(project);
                 })
             }
-            const setfilter= Array.from(_setfilter)
+            const setfilter = Array.from(_setfilter)
             res.status(200).json(setfilter)
         }
     } catch (err) {
         res.status(400).json(err.message)
     }
 };
-
-// function setQueryParameters(order, orderby){
-//     let newOrder = []
-//     if(order) {newOrder = [[order, orderby]]}
-//     else newOrder  = [['title', 'desc']]
-//     console.log('newOrder:', newOrder)
-//     console.log('Objeto enviado:', {
-//         raw: true,
-//         distinct: true, 
-//         order: newOrder
-//       })
-  
-//     return {
-//       raw: true,
-//       distinct: true, 
-//       order: newOrder
-//     }
-// }

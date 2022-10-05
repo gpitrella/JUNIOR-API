@@ -5,9 +5,6 @@ import jwt from 'jsonwebtoken';
 import { config } from "dotenv";
 config();
 
-const CLIENT_URL = process.env.CLIENT_URL
-// require('dotenv').config();
-
 export const signin = async (req, res) => {
   try {
       const { email, password } = req.body;
@@ -42,18 +39,17 @@ export const signup = async (req, res) => {
       if (password.length < 4) {
         throw new Error("Incorrect length password")
       }
+
       // Look for email coincidence
       const userFound = await User.findOne({ email: email });
-      console.log(userFound)
       if (userFound) {
         throw new Error("Email already used")
         // res.status(404).json({ msg: "Email already used" });
       } else {
         // Saving a New User
-        console.log(password, rounds)
         let hpassword = hashSync(password, Number.parseInt(rounds))
         const newUser = new User({ name, email, password: hpassword, image });
-        console.log(newUser)
+        
         await newUser.save();
         // newUser.password = await newUser.encryptPassword(password);
         let token = jwt.sign({ user: newUser }, secret, {expiresIn: expires});
@@ -71,10 +67,9 @@ export const signup = async (req, res) => {
 };
 
 
-export const logout = async (req, res) => {
-  if (req.logout) req.logout();
-    res.status(201).json({
-      success: true
-  })
-};
-
+// export const logout = async (req, res) => {
+//   if (req.logout) req.logout();
+//     res.status(201).json({
+//       success: true
+//   })
+// };

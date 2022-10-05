@@ -1,8 +1,9 @@
 import Project from "../models/Project.js";
 import Tech from "../models/Tech.js";
 import User from "../models/User.js";
-import {ObjectId} from "mongodb"
 import Collaborator from "../models/Collaborator.js";
+import {ObjectId} from "mongodb"
+
 
 export const createNewProject = async (req, res) => {
   try {
@@ -25,7 +26,6 @@ export const createNewProject = async (req, res) => {
     }
     else {
       const findInDb = await Project.findOne({ title: title.toLowerCase() })
-      console.log(findInDb)
       await User.findOne({"_id": ObjectId(userId)}).then(async result=>{ 
         if ( result === null) {
           throw new Error("User not founded")
@@ -53,7 +53,6 @@ export const createNewProject = async (req, res) => {
     return res.status(400).json(error.message)
   }
 }
-
 export const getAllProyect = async (req, res) => {
   try {
     const findInDb = await Project.find({}).sort( { createdAt: 1, "_id": 1 } )
@@ -131,7 +130,6 @@ export const updateProject = async (req, res) => {
     return res.status(400).json(error.message)
   }
 }
-
 export const projectDelete = async (req, res) => {
   try {
     const { id } = req.body

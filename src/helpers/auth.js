@@ -1,12 +1,14 @@
 import jwt from 'jsonwebtoken';
 import { secret } from '../auth.js';
 import User from '../models/User.js';
+
 export default (req,res,next)=>{
     //comprobar la existencia del token
     if(!req.headers.authorization){
         res.status(401).json({msg:'Access Denied'})
     }else{
         //comprobar la validez de este token
+        console.log('ENTRE EN HELPERS:',req.headers.authorization)
         let token = req.headers.authorization.split(" ")[1]
         jwt.verify(token, secret, (err,decoded)=>{
             if(err){
@@ -20,3 +22,4 @@ export default (req,res,next)=>{
         })
     }
 }
+
