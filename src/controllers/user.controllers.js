@@ -5,9 +5,9 @@ import User from "../models/User.js"
 export const AllUsers = async (req,res)=>{
   try {
     const findInDb = await User.find({})
-    res.status(200).json(findInDb)
+    return res.status(200).json(findInDb)
   } catch (error) {
-    res.status(400).json(error.message)
+    return res.status(400).json(error.message)
   }
 }
 
@@ -17,9 +17,9 @@ export const userProjects = async (req, res)=>{
     if (getMyProjects.projects.length){
         let projets = getMyProjects.projects.map(async m => await Project.findById(m))
         const resPromises = await Promise.all(projets)
-        res.json(resPromises)
+        return res.json(resPromises)
       } else {
-        res.status(404).send("you don't have any project")
+        return res.status(404).send("you don't have any project")
       }
 }
 
@@ -48,10 +48,10 @@ try {
     await mycollaborations.save()
     let pendingcolaborators = await Project.findByIdAndUpdate(idProject,{ $push: { 'collaborators': newCollaborator._id } })
     await pendingcolaborators.save()
-    res.status(200).json({message:'collaboration sent successfully'})
+    return res.status(200).json({message:'collaboration sent successfully'})
   }
   } catch (error) {
-    res.status(400).json(error.message)
+    return res.status(400).json(error.message)
   }
 }
 
@@ -61,8 +61,8 @@ export const MyCollaborations = async (req,res)=>{
   if (getMyColaborations.collaborations.length){
     let projets = getMyColaborations.collaborations.map(async m => await Project.findById(m))
     const resPromises = await Promise.all(projets)
-    res.json(resPromises)
+    return res.json(resPromises)
   } else {
-    res.status(404).send("you don't have any collaboration")
+    return res.status(404).send("you don't have any collaboration")
   }
 }
