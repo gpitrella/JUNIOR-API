@@ -38,12 +38,19 @@ export const signup = async (req, res) => {
   try {
       const { name, email, password, confirm_password, image } = req.body;
       console.log(req.body)
-      
-      if (password !== confirm_password) {
-        res.status(401).json({ msg: "Passwords do not match." })
+      const regExpPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$/
+      const regExpEmail = /\S+@\S+\.\S+/;
+      if(!regExpPassword.test(password)){
+        return res.status(401).json({ msg: "Password must contain the following: A lowercase, A capital (uppercase) letter, A number, Minimum 8 characters." })
       }
-      if (password.length < 4) {
-        res.status(401).json({ msg: "Incorrect length password" }) 
+      else if (!regExpEmail.test(email)) {
+        return res.status(401).json({ msg: "Please insert a valid email address."})
+      }
+      else if (password !== confirm_password) {
+        return res.status(401).json({ msg: "Passwords do not match." })
+      }
+      else if (password.length < 4) {
+        return res.status(401).json({ msg: "Incorrect length password" }) 
       }
       // Look for email coincidence
       const userFound = await User.findOne({ email: email });
