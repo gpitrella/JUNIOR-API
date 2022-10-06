@@ -10,7 +10,7 @@ const UserSchema = new mongoose.Schema(
     date: { type: Date, default: Date.now },
     projects: [{type: Schema.Types.ObjectId, ref: 'Project'}], 
     collaborations:[{type: Schema.Types.ObjectId, ref: 'Project'}],
-    github:{type: String },
+    github:{type: String},
     puntaje:{type: Number, default:0},
     image:{
       type: String,
