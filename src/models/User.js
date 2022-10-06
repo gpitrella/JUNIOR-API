@@ -9,8 +9,8 @@ const UserSchema = new mongoose.Schema(
     password: { type: String, required: true },
     date: { type: Date, default: Date.now },
     projects: [{type: Schema.Types.ObjectId, ref: 'Project'}], 
-    collaborations:[{type: Schema.Types.ObjectId, ref: 'Project', status: {type: String, enum: ['pending','accepted','reject'], default: "pending"}}],
-    github:{type: String },
+    collaborations:[{type: Schema.Types.ObjectId, ref: 'Project'}],
+    github:{type: String},
     puntaje:{type: Number, default:0},
     image:{
       type: String,

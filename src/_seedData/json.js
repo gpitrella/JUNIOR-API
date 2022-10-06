@@ -54,8 +54,7 @@ export const usersjson = [
     {
         "name": "Joan",
         "email": "joan.quispe@gmail.com",
-        "password": "123456",
-        "date": "30/09/2022",
+        "password": "Joan1234@",
         "projects": [
                 
             ],
@@ -66,18 +65,17 @@ export const usersjson = [
         "puntaje": 0,
     },
     {
-        "title": "Fakebook",
-        "description": "proyecto grande",
-        "gitHubUrl": "sinruta",
-        "wspUrl": "tampoco",
-        "newtech": [
-                "Javascript",
-                "Python"
+        "name": "Enzo",
+        "email": "enzo.s@gmail.com",
+        "password": "Enzo1234@",
+        "projects": [
+                
             ],
-        "payment": true,
-        "userId": "63365944ba91504b94953c98",
-        "image": "nohay.jpg",
-        "status": "develop"
+        "collaborations": [
+                
+        ],
+        "github": "63365944ba91aa4b94953c98.com",
+        "puntaje": 0,
     }
 ]
 
@@ -87,5 +85,11 @@ export const signinjson = [
         "email": "joan.quispe@gmail.com",
         "password": "123456",
         "confirm_password": "123456"
+    },
+    {
+        "name": "enzo",
+        "email": "enzo.s@gmail.com",
+        "password": "Enzo1234@",
+        "confirm_password": "Enzo1234@"
     }
 ] 

@@ -11,18 +11,23 @@ export const createNewTech = async (req, res) => {
   const findInDb = await Tech.findOne({name:name})
   if(!findInDb){
     const newTech = await Tech.create({ name });
-    res.status(200).send(`Tech ${newTech.name} created successfully!`)
+    return res.status(200).send(`Tech ${newTech.name} created successfully!`)
   }else{
-    res.status(200).send(`${name} already exist`)
+    return res.status(200).send(`${name} already exist`)
   }
 };
 
 export const getAllTech = async (req,res)=>{
   try {
     const findInDb = await Tech.find({})
+<<<<<<< HEAD
     res.status(200).json(findInDb)
+=======
+    console.log('entre a teches', findInDb)
+    return res.status(200).json(findInDb)
+>>>>>>> 405b384944abb629dd2e946e1cd1b44907b5b73b
   } catch (error) {
-    res.status(400).json(error.message)
+    return res.status(400).json(error.message)
   }
 }
 
