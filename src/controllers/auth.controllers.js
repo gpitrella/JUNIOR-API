@@ -2,7 +2,6 @@ import User from "../models/User.js";
 import { compareSync, hashSync } from 'bcrypt';
 import { secret, expires, rounds } from '../auth.js';
 import jwt from 'jsonwebtoken';
-import passport from 'passport';
 import { config } from "dotenv";
 config();
 
@@ -14,7 +13,7 @@ export const signin = async (req, res) => {
       const { email, password } = req.body;
       const userFound = await User.findOne({ email: email });
       if (!userFound) {
-            res.status(404).json({ msg: "Email's User was not found" });
+         throw new Error("Wrong Email or Password");
       } else {
           if (compareSync(password, userFound.password)) {  
             // Creamos el token
@@ -26,11 +25,11 @@ export const signin = async (req, res) => {
             })
           } else {
             // Unauthorized Access
-            res.status(401).json({ msg: "Incorrect password" }) 
+            throw new Error("Wrong Email or Password");
         }        
       }
   } catch (err) { 
-      res.status(500).json(err);
+      res.status(404).json(err.message);
   }
 }
 
@@ -56,7 +55,8 @@ export const signup = async (req, res) => {
       const userFound = await User.findOne({ email: email });
       console.log(userFound)
       if (userFound) {
-        res.status(404).json({ msg: "Email already used" });
+        throw new Error("Email already used")
+        // res.status(404).json({ msg: "Email already used" });
       } else {
         // Saving a New User
         console.log(password, rounds)
@@ -75,7 +75,7 @@ export const signup = async (req, res) => {
       }
         
     } catch (err) { 
-        res.status(500).json(err);
+        res.status(404).json(err.message);
     }
 };
 

@@ -5,7 +5,7 @@ import {ObjectId} from "mongodb"
 
 export const createNewProject = async (req, res) => {
   try {
-    const { title, description, gitHubUrl, wspUrl, image, newtech, userId, payment, status } = req.body;
+    const { title, description, gitHubUrl, wspUrl, image, newtech, userId, payment, status, emailUser } = req.body;
     const errors = [];
     if (!title) {
       errors.push({ text: "Please Write a Title." });
@@ -20,18 +20,16 @@ export const createNewProject = async (req, res) => {
       errors.push({ text: "Please Write one tech" });
     }
     if (errors.length > 0) {
-      return res.send(errors)
+      throw new Error(errors[0].text)
     }
     else {
-      const findInDb = await Project.findOne({ title: title })
-      console.log(findInDb)
+      const findInDb = await Project.findOne({ title: title.toLowerCase() })
       await User.findOne({"_id": ObjectId(userId)}).then(async result=>{ 
         if ( result === null) {
-          //throw new Error(message)
-          return res.status(404).json("User not founded")
+          throw new Error("User not founded")
         }else if(!findInDb){
           const techs = newtech.map(f => f.toLowerCase()) 
-          const newProject = new Project({ title, description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status });  
+          const newProject = new Project({ title:title.toLowerCase(), description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status, emailUser });  
           const saveProject = await newProject.save();
           const mapName = saveProject.tech.map(m => m)
           mapName.forEach(async m => {
@@ -42,18 +40,15 @@ export const createNewProject = async (req, res) => {
           await User.findByIdAndUpdate(userId, { $push: { 'projects': saveProject._id } })
           return res.status(200).json(saveProject)
         } else {
-          return res.status(400).json({ error: `the project with title ${title.toUpperCase()} already exist` })
+          throw new Error(`the project with title ${title.toUpperCase()} already exist`)
         }
      }).catch(err=>{
-         return res.sendStatus(500).send({
-             message:err.message|| "some error occured"
-         });
-         
+         return res.status(500).send(err.message);         
      })
       
     }
-  } catch (err) {
-    return res.status(400).json(err.message)
+  } catch (error) {
+    return res.status(400).json(error.message)
   }
 }
 
@@ -61,8 +56,18 @@ export const getAllProyect = async (req, res) => {
   try {
     const findInDb = await Project.find({}).sort( { createdAt: 1, "_id": 1 } )
     return res.status(200).json(findInDb)
-  } catch (err) {
-    return res.status(400).json(err.message)
+  } catch (error) {
+    return res.status(400).json(error.message)
+  }
+}
+
+export const getProjectById = async (req, res) => {
+  try {
+    const {id} = req.body
+    const findProjects = await Project.findById(id)
+    return res.status(200).json(findProjects)
+  } catch (error) {
+    return res.status(400).json(error.message)
   }
 }
 
@@ -83,11 +88,12 @@ export const updateProject = async (req, res) => {
       errors.push({ text: "Please Write one tech" });
     }
     if (errors.length > 0) {
-      return res.send(errors)
+      throw new Error(errors[0].text)
     }
     else {
       const findInDb = await Project.findOne({ title })
-      if (!findInDb) {
+      console.log(findInDb)
+      if (!findInDb || findInDb._id==projectId) {
         const techs = newtech.map(f => f.toLowerCase())
         const findInDbAndUpdate = await Project.findOneAndUpdate({ _id: projectId }, { title, description, gitHubUrl, wspUrl, image, tech: techs, })
         const saveProject = await findInDbAndUpdate.save();
@@ -100,7 +106,7 @@ export const updateProject = async (req, res) => {
         return res.status(200).json(`${saveProject.title} update successfully`)
       }
       else {
-        return res.status(400).json({ error: `the project with title ${title.toUpperCase()} already exist` })
+        throw new Error(`the project with title ${title.toUpperCase()} already exist`)
       }
     }
   } catch (error) {

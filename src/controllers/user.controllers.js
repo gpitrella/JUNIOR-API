@@ -12,7 +12,7 @@ export const AllUsers = async (req,res)=>{
 }
 
 export const userProjects = async (req, res)=>{
-    let {id} = req.body
+    let { id } = req.body
     let getMyProjects = await User.findById(id)
     if (getMyProjects.projects.length){
         let projets = getMyProjects.projects.map(async m => await Project.findById(m))
@@ -52,5 +52,17 @@ try {
   }
   } catch (error) {
     res.status(400).json(error.message)
+  }
+}
+
+export const MyCollaborations = async (req,res)=>{
+  let {id} = req.body
+  let getMyColaborations = await User.findById(id)
+  if (getMyColaborations.collaborations.length){
+    let projets = getMyColaborations.collaborations.map(async m => await Project.findById(m))
+    const resPromises = await Promise.all(projets)
+    res.json(resPromises)
+  } else {
+    res.status(404).send("you don't have any collaboration")
   }
 }
