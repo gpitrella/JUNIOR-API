@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import express from 'express'
+import express from 'express';
 import { CLIENT_URL, PORT } from './config.js';
 import routes from './routes/index.routes.js'
 import morgan from 'morgan';
@@ -21,6 +21,7 @@ app.use(function (req, res, next) {
     res.header('Access-Control-Allow-Methods', 'GET, HEAD, POST, OPTIONS, PUT, DELETE');
     next();
 });
+
 
 app.use((req, res) => {
   res.render("404");
