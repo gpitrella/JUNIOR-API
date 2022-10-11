@@ -6,7 +6,7 @@ import {ObjectId} from "mongodb"
 
 export const createNewProject = async (req, res) => {
   try {
-    const { title, description, gitHubUrl, wspUrl, image, newtech, userId, payment, status, emailUser } = req.body;
+    const { title, description, gitHubUrl, wspUrl, image, newtech, userId, payment, status, emailUser, collaborators } = req.body;
     const errors = [];
     if (!title) {
       errors.push({ text: "Please Write a Title." });
@@ -29,15 +29,21 @@ export const createNewProject = async (req, res) => {
         if ( result === null) {
           throw new Error("User not founded")
         }else if(!findInDb){
+          // const collaboratorsId = '632a3f676dafa46d00ce6cb1';
           const techs = newtech.map(f => f.toLowerCase()) 
           const newProject = new Project({ title:title.toLowerCase(), description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status, emailUser });  
           const saveProject = await newProject.save();
+
+          // await Project.findByIdAndUpdate(saveProject._id.toString(), { $push: { 'collaborators': { idUser: ObjectId('632a4c68e031e22d1153fa90'), status: 'pending'} } })
+
           const mapName = saveProject.tech.map(m => m)
           mapName.forEach(async m => {
             if (!await Tech.findOne({ name: m })) {
               await Tech.create({ name: m })
             }
           })
+
+          console.log('ID PROYECTO ANTES GRABAR USER:', saveProject._id)
           await User.findByIdAndUpdate(userId, { $push: { 'projects': saveProject._id } })
           return res.status(200).json(saveProject)
         } else {

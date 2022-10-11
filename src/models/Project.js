@@ -39,8 +39,14 @@ const ProjectSchema = new mongoose.Schema(
       enum: ['develop','finish'],
       default: 'develop'
     },
-    collaborators: [
-      {type: Schema.Types.ObjectId, ref: 'User', status: {type: String, enum: ['pending','accepted','reject'], default: "pending"}}
+    collaborators: [ 
+      { 
+        idUser: { type: Schema.Types.ObjectId, ref: 'User' },
+        status: { type: String,
+            enum: ['pending','collaborator', 'cancelled'],
+            default: 'pending'
+        }
+      }
     ],
     emailUser:{
       type:String,
