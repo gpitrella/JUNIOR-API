@@ -1,6 +1,7 @@
-import Collaborator from "../models/Collaborator.js"
-import Project from "../models/Project.js"
-import User from "../models/User.js"
+import Collaborator from "../models/Collaborator.js";
+import Project from "../models/Project.js";
+import User from "../models/User.js";
+import { ObjectId } from "mongodb";
 
 export const AllUsers = async (req,res)=>{
   try {
@@ -35,49 +36,22 @@ export const userProjects = async (req, res)=>{
 
 export const userCollaborations = async (req,res)=>{
   let {idProject, idUserCollaborator, linkedin, number, text, email} = req.body 
-  const message = "you must complete the required fields"
-  // if(!idProject && !idUser && !linkedin && !number && !text && !email) res.status(400).json({message})
+  const message = "You must complete the required fields"
   // const regExpLiteral = /http(s)?:\/\/([\w]+\.)?linkedin\.com\/in\/[A-z0-9_-]+\/?/gim
   // console.log(linkedin.match(regExpLiteral))
-try {
-  let project = await Project.findById(idProject)
-  console.log(project)
-  ///////////////////////
-  // let collabsProject = project.collaborators.map(async m => await Collaborator.findById(m))
-  // let respromise = await Promise.all(collabsProject)
-  ////////////////////////
-  // FALTA MAPEAR LOS USUARIOS QUE YA ESTAN COLABORANDO PARA QUE NO DUPLIQUE
-  let findUsers = project.collaborators.filter((element) => element.idUser.toString() === idUserCollaborator)
-  console.log('FIND USERS:', findUsers)
-  if(findUsers.length > 0) {
-    throw new Error('you have already joined this project')
-  } else {
-    console.log('ID project:', idProject)
-    // console.log('OBJECT ID USER:', ObjectId(idUserCollaborator) )
-    // await Project.findByIdAndUpdate(saveProject._id.toString(), { $push: { 'collaborators': { idUser: ObjectId('632a4c68e031e22d1153fa90'), status: 'pending'} } })
+  try {
+      if( idProject === idUserCollaborator ) { throw new Error( 'Eres el creador del proyecto, no puedes colaborar.')}
+      if(!idProject || !idUserCollaborator || !linkedin || !number || !text || !email) { throw new Error( message ) }
+      let project = await Project.findById(idProject)
+      let findUsers = project.collaborators.filter((element) => element.idUser.toString() === idUserCollaborator)
 
-    await Project.findByIdAndUpdate(project._id.toString(), { $push: { 'collaborators': { idUser: ObjectId("6329b632f0863f343bcc21b8"), status: 'pending' } } })
-    
-    return res.status(200).json({message:'collaboration sent successfully'})
-  }
-  
-
-  // let findUsers = respromise.map(async m => await User.findById(m.idUser))
-  // let resUserpromises = await Promise.all(findUsers)
-  // let conditioncollab = resUserpromises.filter(f=> f._id==idUser)
-
-  // if(conditioncollab.length) throw new Error('you have already joined this project')
-
-  // let user = await User.findById(idUser)
-
-  // if(project && user){
-  //   let newCollaborator = await Collaborator.create({idUser, linkedin, number, text, email})
-  //   let mycollaborations= await User.findByIdAndUpdate(idUser,{ $push: { 'collaborations': idProject } })
-  //   await mycollaborations.save()
-  //   let pendingcolaborators = await Project.findByIdAndUpdate(idProject,{ $push: { 'collaborators': newCollaborator._id } })
-  //   await pendingcolaborators.save()
-  //   return res.status(200).json({message:'collaboration sent successfully'})
-  // }
+      if(findUsers.length > 0) {
+        throw new Error('You have already joined this project')
+      } else {
+        let pendingcolaborators = await Project.findByIdAndUpdate(idProject, { $push: { 'collaborators': { idUser: ObjectId(idUserCollaborator), status: 'pending' } } })
+        await pendingcolaborators.save()
+        return res.status(200).json({ message:'Collaboration sent successfully'})
+      }
   } catch (error) {
     return res.status(400).json(error.message)
   }

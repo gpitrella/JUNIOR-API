@@ -2,7 +2,7 @@ import Project from "../models/Project.js";
 import Tech from "../models/Tech.js";
 import User from "../models/User.js";
 import Collaborator from "../models/Collaborator.js";
-import {ObjectId} from "mongodb"
+import { ObjectId } from "mongodb";
 
 export const createNewProject = async (req, res) => {
   try {
