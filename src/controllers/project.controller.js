@@ -6,7 +6,7 @@ import { ObjectId } from "mongodb";
 
 export const createNewProject = async (req, res) => {
   try {
-    const { title, description, gitHubUrl, wspUrl, image, newtech, userId, payment, status, emailUser, collaborators } = req.body;
+    const { title, description, gitHubUrl, wspUrl, image, newtech, userId, payment, status, emailUser, tasks } = req.body;
     const errors = [];
     if (!title) {
       errors.push({ text: "Please Write a Title." });
@@ -17,12 +17,16 @@ export const createNewProject = async (req, res) => {
     if (!gitHubUrl) {
       errors.push({ text: "Please Write one gitHubUrl" });
     }
-    if (!newtech) {
+    if (newtech.length === 0) {
       errors.push({ text: "Please Write one tech" });
+    }
+    if (tasks.length === 0) {
+      errors.push({ text: "Please Write one tasks" });
     }
     if (errors.length > 0) {
       throw new Error(errors[0].text)
     }
+    
     else {
       const findInDb = await Project.findOne({ title: title.toLowerCase() })
       await User.findOne({"_id": ObjectId(userId)}).then(async result=>{ 
@@ -31,7 +35,10 @@ export const createNewProject = async (req, res) => {
         }else if(!findInDb){
           // const collaboratorsId = '632a3f676dafa46d00ce6cb1';
           const techs = newtech.map(f => f.toLowerCase()) 
-          const newProject = new Project({ title:title.toLowerCase(), description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status, emailUser });  
+          const allTasks = tasks.map((element) => { return { task: element, status: false} })
+          console.log(allTasks)
+
+          const newProject = new Project({ title:title.toLowerCase(), description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status, emailUser, tasks: allTasks });  
           const saveProject = await newProject.save();
 
           // await Project.findByIdAndUpdate(saveProject._id.toString(), { $push: { 'collaborators': { idUser: ObjectId('632a4c68e031e22d1153fa90'), status: 'pending'} } })
