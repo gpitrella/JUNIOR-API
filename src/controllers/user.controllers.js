@@ -41,10 +41,15 @@ export const userCollaborations = async (req,res)=>{
   const message = "You must complete the required fields"
   // const regExpLiteral = /http(s)?:\/\/([\w]+\.)?linkedin\.com\/in\/[A-z0-9_-]+\/?/gim
   // console.log(linkedin.match(regExpLiteral))
+
+  
   try {
       if( idProject === idUserCollaborator ) { throw new Error( 'Eres el creador del proyecto, no puedes colaborar.')}
       if(!idProject || !idUserCollaborator || !linkedin || !number || !text || !email) { throw new Error( message ) }
       let project = await Project.findById(idProject)
+      let userProject = await User.findById(project.userId)
+      let userColaborator = await User.findById(idUserCollaborator)
+      console.log('PROYECTO:', project, 'USER PROYECTO:', userProject, 'USER COLABORATOR:', userColaborator)
   
       let findUsers = project.collaborators.filter((element) => element.idUser.toString() === idUserCollaborator)
 
@@ -54,12 +59,13 @@ export const userCollaborations = async (req,res)=>{
         let pendingcolaborators = await Project.findByIdAndUpdate(idProject, { $push: { 'collaborators': { idUser: ObjectId(idUserCollaborator), status: 'pending' } } })
         await pendingcolaborators.save()
         // ENVIO DE MAIL AL CREADOR DEL PROYECTO
+        const answerEmail = emailCollaborate(text, email, linkedin, number, userProject, userColaborator)
         await transporter.sendMail({
           from: '"Tienes un nuevo colaborador disponible." <losmatabugs@gmail.com>', // sender address
           to: project.emailUser, // list of receivers
-          subject: "Tienes un nuevo colaborador disponible.", // Subject line
-          text: "Hola tienen un nuevo colaborador disponible te enviamos adjuntos todo los datos para que puedas contactarlo.",
-          html: `${ emailCollaborate}`
+          subject: `Hola ${userProject.name} tienen un nuevo colaborador.`, // Subject line
+          text: `Hola ${userProject.name} tienes un nuevo colaborador disponible te enviamos adjuntos todo los datos para que puedas contactarlo.`,
+          html: `${ answerEmail }`
           // `
           // <b>Datos del colaborador:</b>
           // <p> ${text}</p>
