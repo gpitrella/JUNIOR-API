@@ -122,11 +122,10 @@ export const updateProject = async (req, res) => {
     else {
       // const findInDb = await Project.findOne({ title })
       const findInDb = await Project.findById(projectId)
-      console.log(findInDb)
       // if (!findInDb || findInDb._id==projectId) {
       if (findInDb) {
         const techs = newtech.map(f => f.toLowerCase());
-        const allTasks = tasks.map((element) => { return { task: element, status: false} });
+        const allTasks = tasks.map((element) => { return { task: element.task, status: element.statusTask } });
 
         const findInDbAndUpdate = await Project.findOneAndUpdate({ _id: projectId }, { title, description, gitHubUrl, payment, wspUrl, image, tech: techs, tasks: allTasks})
         const saveProject = await findInDbAndUpdate.save();

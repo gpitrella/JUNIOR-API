@@ -14,7 +14,10 @@ export const emailCollaborate = (text, email, linkedin, number, userProject, use
          <td style="padding-top:10px;padding-bottom:10px;text-align:center;">
           <a href="https://appjunior.vercel.app" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://appjunior.vercel.app">
            <img style="border:0" src="https://res.cloudinary.com/djgghmpgh/image/upload/v1665672746/JuniorLogo_pitmgl.png" style="width:100px" >
-          </a>
+           <br>
+                <strong>En JUNIOR potencia tu carrera como desarrollador.</strong>
+            <br>  
+           </a>
          </td>
         </tr>
         <tr>
@@ -66,10 +69,10 @@ export const emailCollaborate = (text, email, linkedin, number, userProject, use
            </tr>
            <tr>
             <td>• Mensaje que te envia el Colaborador: </td>
-            <td>
+           </tr>  
+           <br>
              ${ text }
-            </td>
-           </tr>           
+           </br>     
           </tbody>
          </table>
         </td>

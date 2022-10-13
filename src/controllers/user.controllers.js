@@ -36,12 +36,12 @@ export const userProjects = async (req, res)=>{
       }
 }
 
+// Controlador para hacer agregar un colaborador a un Proyecto:
 export const userCollaborations = async (req,res)=>{
   let {idProject, idUserCollaborator, linkedin, number, text, email} = req.body 
   const message = "You must complete the required fields"
   // const regExpLiteral = /http(s)?:\/\/([\w]+\.)?linkedin\.com\/in\/[A-z0-9_-]+\/?/gim
   // console.log(linkedin.match(regExpLiteral))
-
   
   try {
       if( idProject === idUserCollaborator ) { throw new Error( 'Eres el creador del proyecto, no puedes colaborar.')}
@@ -49,15 +49,18 @@ export const userCollaborations = async (req,res)=>{
       let project = await Project.findById(idProject)
       let userProject = await User.findById(project.userId)
       let userColaborator = await User.findById(idUserCollaborator)
-      console.log('PROYECTO:', project, 'USER PROYECTO:', userProject, 'USER COLABORATOR:', userColaborator)
   
       let findUsers = project.collaborators.filter((element) => element.idUser.toString() === idUserCollaborator)
 
       if(findUsers.length > 0) {
-        throw new Error('You have already joined this project')
+        throw new Error('Ya estas colaborando en este Proyecto.')
       } else {
         let pendingcolaborators = await Project.findByIdAndUpdate(idProject, { $push: { 'collaborators': { idUser: ObjectId(idUserCollaborator), status: 'pending' } } })
+        let pendingUserColaborators = await User.findByIdAndUpdate(idUserCollaborator, { $push: { 'collaborations': project._id } })
+
         await pendingcolaborators.save()
+        await pendingUserColaborators.save()
+
         // ENVIO DE MAIL AL CREADOR DEL PROYECTO
         const answerEmail = emailCollaborate(text, email, linkedin, number, userProject, userColaborator)
         await transporter.sendMail({
@@ -66,14 +69,7 @@ export const userCollaborations = async (req,res)=>{
           subject: `Hola ${userProject.name} tienen un nuevo colaborador.`, // Subject line
           text: `Hola ${userProject.name} tienes un nuevo colaborador disponible te enviamos adjuntos todo los datos para que puedas contactarlo.`,
           html: `${ answerEmail }`
-          // `
-          // <b>Datos del colaborador:</b>
-          // <p> ${text}</p>
-          // <p> ${email}</p>
-          // <p> ${linkedin}</p>          `
       });
-
-
         return res.status(200).json({ message:'Collaboration sent successfully'})
       }
   } catch (error) {
@@ -82,13 +78,17 @@ export const userCollaborations = async (req,res)=>{
 }
 
 export const MyCollaborations = async (req,res)=>{
-  let {id} = req.body
-  let getMyColaborations = await User.findById(id)
-  if (getMyColaborations.collaborations.length){
-    let projets = getMyColaborations.collaborations.map(async m => await Project.findById(m))
-    const resPromises = await Promise.all(projets)
-    return res.json(resPromises)
-  } else {
-    return res.status(404).send("you don't have any collaboration")
+  let { id } = req.body
+  try {
+    let getMyColaborations = await User.findById(id)
+    if (getMyColaborations.collaborations.length > 0){
+      let projets = getMyColaborations.collaborations.map(async m => await Project.findById(m))
+      const resPromises = await Promise.all(projets)
+      return res.json(resPromises)
+    } else {
+      return res.status(404).send("No tienes ninguna colaboración aún.")
+    }
+  } catch (error)  {
+    return res.status(400).json(error.message)
   }
 }
