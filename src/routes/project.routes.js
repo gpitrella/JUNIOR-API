@@ -9,7 +9,7 @@ router.get("/allprojects", getAllProyect);
 
 //GET By Id
 router.get("/:id", getProjectById);
-router.get("/projectsbyid", getProjectById)
+// router.get("/projectsbyid", getProjectById)
 //POST
 router.post("/newproject", createNewProject);
 //PUT

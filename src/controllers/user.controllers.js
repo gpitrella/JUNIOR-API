@@ -2,6 +2,8 @@ import Collaborator from "../models/Collaborator.js";
 import Project from "../models/Project.js";
 import User from "../models/User.js";
 import { ObjectId } from "mongodb";
+import { transporter } from "../helpers/mailer.js";
+import { emailCollaborate } from "../helpers/constant.js";
 
 export const AllUsers = async (req,res)=>{
   try {
@@ -23,10 +25,10 @@ export const getUserById = async (req, res) => {
 }
 
 export const userProjects = async (req, res)=>{
-    let { id } = req.body
+    let { id } = req.params
     let getMyProjects = await User.findById(id)
-    if (getMyProjects.projects.length){
-        let projets = getMyProjects.projects.map(async m => await Project.findById(m))
+    if (getMyProjects.projects.length > 0) {
+      let projets = getMyProjects.projects.map(async (m) => await Project.findById(m))
         const resPromises = await Promise.all(projets)
         return res.json(resPromises)
       } else {
@@ -43,6 +45,7 @@ export const userCollaborations = async (req,res)=>{
       if( idProject === idUserCollaborator ) { throw new Error( 'Eres el creador del proyecto, no puedes colaborar.')}
       if(!idProject || !idUserCollaborator || !linkedin || !number || !text || !email) { throw new Error( message ) }
       let project = await Project.findById(idProject)
+  
       let findUsers = project.collaborators.filter((element) => element.idUser.toString() === idUserCollaborator)
 
       if(findUsers.length > 0) {
@@ -50,6 +53,21 @@ export const userCollaborations = async (req,res)=>{
       } else {
         let pendingcolaborators = await Project.findByIdAndUpdate(idProject, { $push: { 'collaborators': { idUser: ObjectId(idUserCollaborator), status: 'pending' } } })
         await pendingcolaborators.save()
+        // ENVIO DE MAIL AL CREADOR DEL PROYECTO
+        await transporter.sendMail({
+          from: '"Tienes un nuevo colaborador disponible." <losmatabugs@gmail.com>', // sender address
+          to: project.emailUser, // list of receivers
+          subject: "Tienes un nuevo colaborador disponible.", // Subject line
+          text: "Hola tienen un nuevo colaborador disponible te enviamos adjuntos todo los datos para que puedas contactarlo.",
+          html: `${ emailCollaborate}`
+          // `
+          // <b>Datos del colaborador:</b>
+          // <p> ${text}</p>
+          // <p> ${email}</p>
+          // <p> ${linkedin}</p>          `
+      });
+
+
         return res.status(200).json({ message:'Collaboration sent successfully'})
       }
   } catch (error) {

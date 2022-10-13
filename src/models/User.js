@@ -22,6 +22,7 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: true
     },
+    techs: [{ type: String }], 
   },
   {
     timestamps: false,

@@ -6,8 +6,8 @@ const router = Router();
 
 router.get("/allusers",AllUsers);
 router.get("/:id", getUserById);
-router.post("/projects", auth, userProjects);
-router.post("/collaboration",userCollaborations)
-router.post("/mycollaborations", MyCollaborations)
+router.get("/projects/:id", auth, userProjects);
+router.post("/collaboration",userCollaborations);
+router.post("/mycollaborations", MyCollaborations);
 
 export default router;
