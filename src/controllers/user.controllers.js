@@ -1,6 +1,7 @@
-import Collaborator from "../models/Collaborator.js";
+// import Collaborator from "../models/Collaborator.js";
 import Project from "../models/Project.js";
 import User from "../models/User.js";
+import Tech from "../models/Tech.js";
 import { ObjectId } from "mongodb";
 import { transporter } from "../helpers/mailer.js";
 import { emailCollaborate } from "../helpers/constant.js";
@@ -89,6 +90,35 @@ export const MyCollaborations = async (req,res)=>{
       return res.status(404).send("No tienes ninguna colaboración aún.")
     }
   } catch (error)  {
+    return res.status(400).json(error.message)
+  }
+}
+
+export const userUpdate = async (req, res) => {
+  try{
+      let { id } = req.params;
+      let data = req.body
+
+      let findUserInDb = await User.findById(id)
+      if (findUserInDb) {
+        if(!findUserInDb.status){
+          throw new Error(`Usuario bloqueado.`)
+        }else{
+          const findInDbAndUpdate = await User.findOneAndUpdate({ _id: id }, data)
+          const saveUser = await findInDbAndUpdate.save();
+          if(saveUser.techs.length > 0){
+            saveUser.techs.forEach(async (m) => {
+              if (!await Tech.findOne({ name: m })) {
+                await Tech.create({ name: m })
+              } 
+            })    
+          }
+          return res.json('Usuario Actualizado Correctamente');  
+        }
+     } else {
+        throw new Error(`Usuario no encontrado.`)
+     }
+  }catch(error){
     return res.status(400).json(error.message)
   }
 }

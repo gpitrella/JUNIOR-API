@@ -32,7 +32,7 @@ export const createNewProject = async (req, res) => {
       const findInDb = await Project.findOne({ title: title.toLowerCase() })
       await User.findOne({"_id": ObjectId(userId)}).then(async result=>{ 
         if ( result === null) {
-          throw new Error("User not founded")
+          throw new Error("User no encontrado.")
         }else if(!findInDb){
           // const collaboratorsId = '632a3f676dafa46d00ce6cb1';
           const techs = newtech.map(f => f.toLowerCase()) 
@@ -53,7 +53,7 @@ export const createNewProject = async (req, res) => {
           await User.findByIdAndUpdate(userId, { $push: { 'projects': saveProject._id } })
           return res.status(200).json(saveProject)
         } else {
-          throw new Error(`the project with title ${title.toUpperCase()} already exist`)
+          throw new Error(`El proyecto con el titulo: ${title.toUpperCase()} ya existe.`)
         }
      }).catch(err=>{
          return res.status(500).send(err.message);         
