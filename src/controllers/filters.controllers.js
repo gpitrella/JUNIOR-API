@@ -4,19 +4,19 @@ export const filterByTechs = async (req,res)=>{
     try {
         const { teches, payment, status, orderby, order } = req.body
         const errors = [];
-        if (teches === undefined || teches === null) {
+        if (!teches) {
             errors.push({ text: "Please Write a Tech to filter." });
         }
-        if (payment === undefined || payment === null) {
+        if (!payment) {
             errors.push({ text: "Please Write a payment to filter." });
         }
-        if (status === undefined || status === null) {
+        if (!status) {
             errors.push({ text: "Please Write a status to filter." });
         }
-        if (order === undefined || order === null) {
+        if (!order) {
             errors.push({ text: "Please Write a order to filter." });
         }
-        if (orderby === undefined || orderby === null) {
+        if (!orderby) {
             errors.push({ text: "Please Write a orderby to filter." });
         }
         if (errors.length > 0) {
@@ -57,6 +57,6 @@ export const filterByTechs = async (req,res)=>{
             res.status(200).json(setfilter)
         }
     } catch (err) {
-        res.status(400).json(err.message)
+        return res.status(400).json(err.message)
     }
 };

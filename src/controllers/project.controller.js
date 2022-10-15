@@ -2,11 +2,12 @@ import Project from "../models/Project.js";
 import Tech from "../models/Tech.js";
 import User from "../models/User.js";
 import Collaborator from "../models/Collaborator.js";
-import {ObjectId} from "mongodb"
+import { ObjectId } from "mongodb";
+
 
 export const createNewProject = async (req, res) => {
   try {
-    const { title, description, gitHubUrl, wspUrl, image, newtech, userId, payment, status, emailUser } = req.body;
+    const { title, description, gitHubUrl, wspUrl, image, newtech, userId, payment, status, emailUser, tasks } = req.body;
     const errors = [];
     if (!title) {
       errors.push({ text: "Please Write a Title." });
@@ -17,31 +18,42 @@ export const createNewProject = async (req, res) => {
     if (!gitHubUrl) {
       errors.push({ text: "Please Write one gitHubUrl" });
     }
-    if (!newtech) {
+    if (!newtech || newtech.length === 0) {
       errors.push({ text: "Please Write one tech" });
+    }
+    if (!tasks || tasks.length === 0) {
+      errors.push({ text: "Please Write one tasks" });
     }
     if (errors.length > 0) {
       throw new Error(errors[0].text)
     }
+    
     else {
       const findInDb = await Project.findOne({ title: title.toLowerCase() })
       await User.findOne({"_id": ObjectId(userId)}).then(async result=>{ 
         if ( result === null) {
-          throw new Error("User not founded")
+          throw new Error("User no encontrado.")
         }else if(!findInDb){
+          // const collaboratorsId = '632a3f676dafa46d00ce6cb1';
           const techs = newtech.map(f => f.toLowerCase()) 
-          const newProject = new Project({ title:title.toLowerCase(), description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status, emailUser });  
+          const allTasks = tasks.map((element) => { return { task: element, status: false} })
+
+          const newProject = new Project({ title:title.toLowerCase(), description, gitHubUrl, wspUrl, image, tech: techs, userId, payment, status, emailUser, tasks: allTasks });  
           const saveProject = await newProject.save();
+
+          // await Project.findByIdAndUpdate(saveProject._id.toString(), { $push: { 'collaborators': { idUser: ObjectId('632a4c68e031e22d1153fa90'), status: 'pending'} } })
+
           const mapName = saveProject.tech.map(m => m)
           mapName.forEach(async m => {
             if (!await Tech.findOne({ name: m })) {
               await Tech.create({ name: m })
             }
           })
+
           await User.findByIdAndUpdate(userId, { $push: { 'projects': saveProject._id } })
           return res.status(200).json(saveProject)
         } else {
-          throw new Error(`the project with title ${title.toUpperCase()} already exist`)
+          throw new Error(`El proyecto con el titulo: ${title.toUpperCase()} ya existe.`)
         }
      }).catch(err=>{
          return res.status(500).send(err.message);         
@@ -51,22 +63,23 @@ export const createNewProject = async (req, res) => {
   } catch (error) {
     return res.status(400).json(error.message)
   }
-}
+};
+
 export const getAllProyect = async (req, res) => {
   try {
-    const findInDb = await Project.find({}).sort( { createdAt: 1, "_id": 1 } )
+    const findInDb = await Project.find({}).sort( { updatedAt: -1, "_id": 1 } )
     return res.status(200).json(findInDb)
   } catch (error) {
     return res.status(400).json(error.message)
   }
-}
+};
 
 export const getProjectById = async (req, res) => {
   try {
-    const {id} = req.params
+    const { id } = req.params
     const findProjectDb = await Project.findById(id)
-
     return res.status(200).json(findProjectDb)
+
   } catch (error) {
     return res.status(400).json(error.message)
   }
@@ -86,7 +99,7 @@ export const getProjectCollaborator = async (req, res) => {
 
 export const updateProject = async (req, res) => {
   try {
-    const { title, description, gitHubUrl, wspUrl, image, newtech, projectId } = req.body;
+    const { title, description, gitHubUrl, wspUrl, image, newtech, projectId, tasks, payment } = req.body;
     const errors = [];
     if (!title) {
       errors.push({ text: "Please Write a Title." });
@@ -97,18 +110,24 @@ export const updateProject = async (req, res) => {
     if (!gitHubUrl) {
       errors.push({ text: "Please Write one gitHubUrl" });
     }
-    if (!newtech) {
+    if (!newtech || newtech.length === 0) {
       errors.push({ text: "Please Write one tech" });
+    }
+    if (!tasks || tasks.length === 0) {
+      errors.push({ text: "Please Write one task" });
     }
     if (errors.length > 0) {
       throw new Error(errors[0].text)
     }
     else {
-      const findInDb = await Project.findOne({ title })
-      console.log(findInDb)
-      if (!findInDb || findInDb._id==projectId) {
-        const techs = newtech.map(f => f.toLowerCase())
-        const findInDbAndUpdate = await Project.findOneAndUpdate({ _id: projectId }, { title, description, gitHubUrl, wspUrl, image, tech: techs, })
+      // const findInDb = await Project.findOne({ title })
+      const findInDb = await Project.findById(projectId)
+      // if (!findInDb || findInDb._id==projectId) {
+      if (findInDb) {
+        const techs = newtech.map(f => f.toLowerCase());
+        const allTasks = tasks.map((element) => { return { task: element.task, status: element.statusTask } });
+
+        const findInDbAndUpdate = await Project.findOneAndUpdate({ _id: projectId }, { title, description, gitHubUrl, payment, wspUrl, image, tech: techs, tasks: allTasks})
         const saveProject = await findInDbAndUpdate.save();
         const mapName = saveProject.tech.map(m => m)
         mapName.forEach(async m => {
@@ -119,13 +138,14 @@ export const updateProject = async (req, res) => {
         return res.status(200).json(`${saveProject.title} update successfully`)
       }
       else {
-        throw new Error(`the project with title ${title.toUpperCase()} already exist`)
+        throw new Error(`the project with title ${title.toUpperCase()} not exist`)
       }
     }
   } catch (error) {
     return res.status(400).json(error.message)
   }
-}
+};
+
 export const projectDelete = async (req, res) => {
   try {
     const { id } = req.body
