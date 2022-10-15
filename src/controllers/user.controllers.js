@@ -5,6 +5,8 @@ import Tech from "../models/Tech.js";
 import { ObjectId } from "mongodb";
 import { transporter } from "../helpers/mailer.js";
 import { emailCollaborate } from "../helpers/constant.js";
+import { secret, expires, rounds } from '../auth.js';
+import jwt from 'jsonwebtoken';
 
 export const AllUsers = async (req,res)=>{
   try {
@@ -105,7 +107,8 @@ export const userUpdate = async (req, res) => {
           throw new Error(`Usuario bloqueado.`)
         }else{
           const findInDbAndUpdate = await User.findOneAndUpdate({ _id: id }, data)
-          const saveUser = await findInDbAndUpdate.save();
+          await findInDbAndUpdate.save();
+          const saveUser = await User.findById(id)
           if(saveUser.techs.length > 0){
             saveUser.techs.forEach(async (m) => {
               if (!await Tech.findOne({ name: m })) {
@@ -113,7 +116,13 @@ export const userUpdate = async (req, res) => {
               } 
             })    
           }
-          return res.json('Usuario Actualizado Correctamente');  
+          let token = jwt.sign({ user: saveUser }, secret, {expiresIn: expires});
+
+          res.json({
+            user: saveUser,
+            token: token,
+            msg: 'Usuario Actualizado Correctamente.' 
+          });
         }
      } else {
         throw new Error(`Usuario no encontrado.`)
