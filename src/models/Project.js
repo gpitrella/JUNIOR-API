@@ -53,7 +53,8 @@ const ProjectSchema = new mongoose.Schema(
     emailUser:{
       type:String,
       required: true
-    }
+    },
+    images: [{ type: String }],
   },
   {
     timestamps: true,

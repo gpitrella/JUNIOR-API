@@ -24,6 +24,11 @@ const UserSchema = new mongoose.Schema(
       default: true
     },
     techs: [{ type: String }], 
+    tests: [{ 
+      test: { type: String },
+      value: { type: Number, default: 0 },
+      date: { type: Date, default: Date.now }
+  }],
   },
   {
     timestamps: false,
