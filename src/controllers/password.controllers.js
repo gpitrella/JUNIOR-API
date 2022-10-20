@@ -44,16 +44,16 @@ export const recoverPassword = async(req,res)=>{
 }
 export const newPassword = async(req,res)=>{
     try {   
-        const newPassword = req.query.newPassword
-        const totaldata = req.body.headers.Authorization
-        const token = totaldata.slice(totaldata.indexOf(' ') + 1, totaldata.length - 1)
-        if(!token && !newPassword) throw new Error('All the fields are required')
+        const { newpassword } = req.params;
+        const token = req.query.token;
+
+        if(!token && !newpassword) throw new Error('All the fields are required')
         jwt.verify(token, secret, async (error, decoded) => {
             if(error){
                 throw new Error('There was a problem decoding the token:', error)
             }else{
-                let hpassword = hashSync(newPassword, Number.parseInt(rounds))
-                let user = await User.findByIdAndUpdate( decoded.id, {password:hpassword})
+                let hpassword = hashSync(newpassword, Number.parseInt(rounds))
+                let user = await User.findByIdAndUpdate( decoded.user._id, {password: hpassword})
                 await user.save()
                 res.json('Password updated successfully')
             }

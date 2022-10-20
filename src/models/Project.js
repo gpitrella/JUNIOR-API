@@ -55,6 +55,12 @@ const ProjectSchema = new mongoose.Schema(
       required: true
     },
     images: [{ type: String }],
+    paymentAmount: { type: Number, default: 0 },
+    collaboratorsNumber: { type: Number, default: 0 },
+    comments: [{
+      comment: { type: String },
+      answer: { type: String }
+    }]
   },
   {
     timestamps: true,
