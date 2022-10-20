@@ -47,22 +47,22 @@ const ProjectSchema = new mongoose.Schema(
         }
     }],
     tasks: [{
-        task: { type: String, required: true },
+        task: { type: String, required: true, default: '' },
         status: { type: Boolean,  default: false }
     }],
     emailUser:{
       type:String,
       required: true
     },
-    images: [{ type: String }],
+    images: [{ type: String, default: '' }],
     paymentAmount: { type: Number, default: 0 },
     collaboratorsNumber: { type: Number, default: 0 },
     comments: [{
-      comment: { type: String },
-      answer: { type: String }
+      comment: { type: String, default: ''},
+      answer: { type: String, default: '' }
     }],
     deployment: {
-      type: String
+      type: String, default: ''
     }
   },
   {
