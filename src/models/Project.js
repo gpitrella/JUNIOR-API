@@ -39,13 +39,28 @@ const ProjectSchema = new mongoose.Schema(
       enum: ['develop','finish'],
       default: 'develop'
     },
-    collaborators: [
-      {type: Schema.Types.ObjectId, ref: 'Collaborator'}
-    ],
+    collaborators: [{ 
+        idUser: { type: Schema.Types.ObjectId, ref: 'User' },
+        status: { type: String,
+            enum: ['pending','collaborator', 'cancelled'],
+            default: 'pending'
+        }
+    }],
+    tasks: [{
+        task: { type: String, required: true },
+        status: { type: Boolean,  default: false }
+    }],
     emailUser:{
       type:String,
       required: true
-    }
+    },
+    images: [{ type: String }],
+    paymentAmount: { type: Number, default: 0 },
+    collaboratorsNumber: { type: Number, default: 0 },
+    comments: [{
+      comment: { type: String },
+      answer: { type: String }
+    }]
   },
   {
     timestamps: true,

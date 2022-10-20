@@ -44,17 +44,21 @@ export const recoverPassword = async(req,res)=>{
 }
 export const newPassword = async(req,res)=>{
     try {   
-        const {newPassword} = req.body
-        const token = req.headers
-        if(!token && newPassword===0) throw new Error('All the fields are required')
-        let tokenverify= jwt.verify(token.token, secret)
-        //let finduser= await User.findById(tokenverify.id)
-        //if(compareSync(newPassword, finduser.password)) res.status(400).json({message:'ya has utilizado esta contraseña antes, prueba con otra...'})
-        let hpassword = hashSync(newPassword, Number.parseInt(rounds))
-        let user = await User.findByIdAndUpdate( tokenverify.id,{password:hpassword})
-        await user.save()
-        res.json('newpassword' + newPassword)
+        const { newpassword } = req.params;
+        const token = req.query.token;
+
+        if(!token && !newpassword) throw new Error('All the fields are required')
+        jwt.verify(token, secret, async (error, decoded) => {
+            if(error){
+                throw new Error('There was a problem decoding the token:', error)
+            }else{
+                let hpassword = hashSync(newpassword, Number.parseInt(rounds))
+                let user = await User.findByIdAndUpdate( decoded.user._id, {password: hpassword})
+                await user.save()
+                res.json('Password updated successfully')
+            }
+        })
     } catch (error) {
         res.status(400).json(error.message)
     }
-}
+};
