@@ -60,7 +60,10 @@ const ProjectSchema = new mongoose.Schema(
     comments: [{
       comment: { type: String },
       answer: { type: String }
-    }]
+    }],
+    deployment: {
+      type: String
+    }
   },
   {
     timestamps: true,
