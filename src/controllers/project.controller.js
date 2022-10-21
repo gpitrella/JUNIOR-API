@@ -30,6 +30,7 @@ export const createNewProject = async (req, res) => {
     
     else {
       const findInDb = await Project.findOne({ title: title.toLowerCase() })
+      console.log(userId)
       await User.findOne({"_id": ObjectId(userId)}).then(async result=>{ 
         if ( result === null) {
           throw new Error("User no encontrado.")
