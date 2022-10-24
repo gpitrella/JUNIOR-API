@@ -14,7 +14,7 @@ app.use(morgan('dev'))
 
 // Enable CORS
 app.use(function (req, res, next) {
-  res.header("Access-Control-Allow-Origin", `https://appjunior.vercel.app`); // update to match the domain you will make the request from
+  res.header("Access-Control-Allow-Origin", CLIENT_URL); // update to match the domain you will make the request from
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization');
   res.header('Access-Control-Allow-Methods', 'GET, HEAD, POST, OPTIONS, PUT, DELETE');
@@ -23,8 +23,5 @@ app.use(function (req, res, next) {
 
 app.use("/", routes);
 
-// app.use((req, res) => {
-//   res.render("404");
-// });
 
 export default app;
