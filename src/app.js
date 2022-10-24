@@ -11,6 +11,7 @@ app.set('port',PORT)
 app.use(bodyParser.json())
 app.use(morgan('dev'))
 
+app.use("/", routes);
 
 // Enable CORS
 app.use(function (req, res, next) {
@@ -21,10 +22,9 @@ app.use(function (req, res, next) {
   next();
 });
 
-app.use("/", routes);
 
-app.use((req, res) => {
-  res.render("404");
-});
+// app.use((req, res) => {
+//   res.render("404");
+// });
 
 export default app;
