@@ -34,19 +34,19 @@ export const signup = async (req, res) => {
   try {
       const { name, email, password, confirm_password, image } = req.body;
       console.log(req.body)
-      const regExpPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$/
+      // const regExpPassword = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[#$@!%&*?])[A-Za-z\d#$@!%&*?]{8,30}$/
       const regExpEmail = /\S+@\S+\.\S+/;
-      if(!regExpPassword.test(password)){
-        return res.status(401).json({ msg: "Password must contain the following: A lowercase, A capital (uppercase) letter, A number, Minimum 8 characters." })
+      if(!password){
+        throw new Error("Password must contain the following: A lowercase, A capital (uppercase) letter, A number, Minimum 8 characters." )
       }
-      else if (!regExpEmail.test(email)) {
-        return res.status(401).json({ msg: "Please insert a valid email address."})
+      else if (!regExpEmail.test(email)){
+        throw new Error("Please insert a valid email address.")
       }
       else if (password !== confirm_password) {
-        return res.status(401).json({ msg: "Passwords do not match." })
+        throw new Error("Passwords do not match.")
       }
       else if (password.length < 4) {
-        return res.status(401).json({ msg: "Incorrect length password" }) 
+        throw new Error("Incorrect length password") 
       }
 
       // Look for email coincidence
@@ -74,11 +74,3 @@ export const signup = async (req, res) => {
         res.status(404).json(err.message);
     }
 };
-
-
-// export const logout = async (req, res) => {
-//   if (req.logout) req.logout();
-//     res.status(201).json({
-//       success: true
-//   })
-// };

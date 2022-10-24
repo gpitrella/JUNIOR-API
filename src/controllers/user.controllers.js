@@ -28,15 +28,19 @@ export const getUserById = async (req, res) => {
 }
 
 export const userProjects = async (req, res)=>{
+  try {
     let { id } = req.params
     let getMyProjects = await User.findById(id)
     if (getMyProjects.projects.length > 0) {
       let projets = getMyProjects.projects.map(async (m) => await Project.findById(m))
         const resPromises = await Promise.all(projets)
-        return res.json(resPromises)
+        res.json(resPromises)
       } else {
-        return res.status(404).send("you don't have any project")
+        res.send([])
       }
+  } catch (error) {
+    res.status(400).json(error.message)
+  }
 }
 
 // Controlador para hacer agregar un colaborador a un Proyecto:
@@ -87,9 +91,9 @@ export const MyCollaborations = async (req,res)=>{
     if (getMyColaborations.collaborations.length > 0){
       let projets = getMyColaborations.collaborations.map(async m => await Project.findById(m))
       const resPromises = await Promise.all(projets)
-      return res.json(resPromises)
+      res.json(resPromises)
     } else {
-      return res.status(404).send("No tienes ninguna colaboración aún.")
+      res.json([])
     }
   } catch (error)  {
     return res.status(400).json(error.message)
