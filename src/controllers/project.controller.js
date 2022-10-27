@@ -30,7 +30,7 @@ export const createNewProject = async (req, res) => {
     
     else {
       const findInDb = await Project.findOne({ title: title.toLowerCase() })
-      console.log(userId)
+      
       await User.findOne({"_id": ObjectId(userId)}).then(async result=>{ 
         if ( result === null) {
           throw new Error("User no encontrado.")
@@ -90,8 +90,8 @@ export const getProjectCollaborator = async (req, res) => {
   try{
       const {id} = req.params
       const findProjectDb = await Project.findById(id)
-      const collaborator = findProjectDb.collaborators.map(async elem => await Collaborator.findById(elem))
-      const respromise = await Promise.all(collaborator)
+      const userCollaborator = findProjectDb.collaborators.map(async (elem) => await User.findById(elem.idUser))
+      const respromise = await Promise.all(userCollaborator)
       res.status(200).json(respromise)
   } catch (error) {
     return res.status(400).json(error.message)

@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { createNewProject, getAllProyect, getProjectById, projectDelete, updateProject } from "../controllers/project.controller.js";
+import { createNewProject, getAllProyect, getProjectById, getProjectCollaborator, projectDelete, updateProject } from "../controllers/project.controller.js";
 //import { isAuthenticated } from "../helpers/auth.js";
 import auth from "../helpers/auth.js";
 
@@ -9,7 +9,10 @@ router.get("/allprojects", getAllProyect);
 
 //GET By Id
 router.get("/:id", getProjectById);
-// router.get("/projectsbyid", getProjectById)
+
+// GET Project Collaborators
+router.get("/collaborator/:id", getProjectCollaborator);
+
 //POST
 router.post("/newproject", createNewProject);
 //PUT
