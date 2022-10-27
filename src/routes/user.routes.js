@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { AllUsers, userProjects, userCollaborations, MyCollaborations, getUserById, userUpdate } from "../controllers/user.controllers.js";
+import { AllUsers, userProjects, userCollaborations, MyCollaborations, getUserById, userUpdate, userCollaboratorName } from "../controllers/user.controllers.js";
 import auth from "../helpers/auth.js";
 
 const router = Router();
@@ -7,7 +7,8 @@ const router = Router();
 router.get("/allusers",AllUsers);
 router.get("/:id", getUserById);
 router.get("/projects/:id", auth, userProjects);
-router.put("/update/:id", userUpdate)
+router.put("/update/:id", userUpdate);
+router.get("/name/:id", userCollaboratorName)
 router.post("/collaboration",userCollaborations);
 router.post("/mycollaborations", MyCollaborations);
 

@@ -43,6 +43,17 @@ export const userProjects = async (req, res)=>{
   }
 }
 
+// GET USER COLLABORATOR Name
+export const userCollaboratorName = async (req, res)=>{
+  try {
+    let { id } = req.params
+    let getUserCollaborator = await User.findById(id)
+        res.status(200).json(getUserCollaborator.name)
+    } catch (error) {
+    res.status(400).json(error.message)
+  }
+}
+
 // Controlador para hacer agregar un colaborador a un Proyecto:
 export const userCollaborations = async (req,res)=>{
   let {idProject, idUserCollaborator, linkedin, number, text, email} = req.body 
