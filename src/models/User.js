@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema(
     date: { type: Date, default: Date.now },
     projects: [{type: Schema.Types.ObjectId, ref: 'Project'}], 
     collaborations:[{type: Schema.Types.ObjectId, ref: 'Project'}],
+    comments:[{type: Schema.Types.ObjectId, ref: 'Comment'}],
     github:{type: String, default:"No especificado"},
     puntaje:{type: Number, default: 0},
     image:{
@@ -28,7 +29,7 @@ const UserSchema = new mongoose.Schema(
       test: { type: String },
       value: { type: Number, default: 0 },
       date: { type: Date, default: Date.now }
-  }],
+  }]
   },
   {
     timestamps: false,

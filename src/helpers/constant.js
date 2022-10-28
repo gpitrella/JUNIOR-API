@@ -1,6 +1,6 @@
 
 
-export const emailCollaborate = (text, email, linkedin, number, userProject, userColaborator) => {
+export const emailCollaborate = (text, email, linkedin, number, userProject, userColaborator, github) => {
     
  return ( `<div class=""><div class="aHl"></div><div id=":mk" tabindex="-1"></div><div id=":nr" class="ii gt" jslog="20277; u014N:xr6bB; 4:W251bGwsbnVsbCxbXV0."><div id=":m6" class="a3s aiL msg2237192363544095831"><div class="adM">
  </div><div><div class="adM">
@@ -55,6 +55,12 @@ export const emailCollaborate = (text, email, linkedin, number, userProject, use
              ${ linkedin }
             </td>
            </tr>
+           <tr>
+           <td>• GitHub del Colaborador: </td>
+           <td>
+            ${ github }
+           </td>
+          </tr>
            <tr>
             <td>• Email del Colaborador: </td>
             <td>
