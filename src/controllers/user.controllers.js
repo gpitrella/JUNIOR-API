@@ -56,14 +56,14 @@ export const userCollaboratorName = async (req, res)=>{
 
 // Controlador para hacer agregar un colaborador a un Proyecto:
 export const userCollaborations = async (req,res)=>{
-  let {idProject, idUserCollaborator, linkedin, number, text, email} = req.body 
+  let {idProject, idUserCollaborator, linkedin, number, text, email, github } = req.body 
   const message = "You must complete the required fields"
   // const regExpLiteral = /http(s)?:\/\/([\w]+\.)?linkedin\.com\/in\/[A-z0-9_-]+\/?/gim
   // console.log(linkedin.match(regExpLiteral))
   
   try {
       if( idProject === idUserCollaborator ) { throw new Error( 'Eres el creador del proyecto, no puedes colaborar.')}
-      if(!idProject || !idUserCollaborator || !linkedin || !number || !text || !email) { throw new Error( message ) }
+      if(!idProject || !idUserCollaborator || !linkedin || !number || !text || !email || !github) { throw new Error( message ) }
       let project = await Project.findById(idProject)
       let userProject = await User.findById(project.userId)
       let userColaborator = await User.findById(idUserCollaborator)
@@ -80,7 +80,7 @@ export const userCollaborations = async (req,res)=>{
         await pendingUserColaborators.save()
 
         // ENVIO DE MAIL AL CREADOR DEL PROYECTO
-        const answerEmail = emailCollaborate(text, email, linkedin, number, userProject, userColaborator)
+        const answerEmail = emailCollaborate(text, email, linkedin, number, userProject, userColaborator, github)
         await transporter.sendMail({
           from: '"Tienes un nuevo colaborador disponible." <losmatabugs@gmail.com>', // sender address
           to: project.emailUser, // list of receivers
