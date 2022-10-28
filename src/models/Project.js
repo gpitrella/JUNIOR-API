@@ -57,10 +57,7 @@ const ProjectSchema = new mongoose.Schema(
     images: [{ type: String, default: '' }],
     paymentAmount: { type: Number, default: 0 },
     collaboratorsNumber: { type: Number, default: 0 },
-    comments: [{
-      comment: { type: String, default: ''},
-      answer: { type: String, default: '' }
-    }],
+    comments:[{type: Schema.Types.ObjectId, ref: 'Comment'}],
     deployment: {
       type: String, default: ''
     }
