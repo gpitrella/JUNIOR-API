@@ -60,7 +60,10 @@ const ProjectSchema = new mongoose.Schema(
     comments:[{type: Schema.Types.ObjectId, ref: 'Comment'}],
     deployment: {
       type: String, default: ''
-    }
+    },
+    sendInvitation: [{ 
+      idUser: { type: Schema.Types.ObjectId, ref: 'User' },
+    }],
   },
   {
     timestamps: true,
