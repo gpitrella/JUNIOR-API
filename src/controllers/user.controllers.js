@@ -4,7 +4,7 @@ import User from "../models/User.js";
 import Tech from "../models/Tech.js";
 import { ObjectId } from "mongodb";
 import { transporter } from "../helpers/mailer.js";
-import { emailCollaborate } from "../helpers/constant.js";
+import { emailCollaborate, sendEmailInvitation } from "../helpers/constant.js";
 import { secret, expires, rounds } from '../auth.js';
 import jwt from 'jsonwebtoken';
 
@@ -93,7 +93,7 @@ export const userCollaborations = async (req,res)=>{
   } catch (error) {
     return res.status(400).json(error.message)
   }
-}
+};
 
 export const MyCollaborations = async (req,res)=>{
   let { id } = req.body
@@ -109,7 +109,7 @@ export const MyCollaborations = async (req,res)=>{
   } catch (error)  {
     return res.status(400).json(error.message)
   }
-}
+};
 
 export const userUpdate = async (req, res) => {
   try{
@@ -145,4 +145,45 @@ export const userUpdate = async (req, res) => {
   }catch(error){
     return res.status(400).json(error.message)
   }
-}
+};
+
+
+// Controlador para hacer agregar un colaborador a un Proyecto:
+export const sendInvitationProject = async (req,res)=>{
+  let { idProject, idUserToInvite, linkedin, number, text, github } = req.body 
+  console.log('DATA: ', idProject, idUserToInvite, linkedin, number, text, github)
+  const message = "You must complete the required fields"
+  // const regExpLiteral = /http(s)?:\/\/([\w]+\.)?linkedin\.com\/in\/[A-z0-9_-]+\/?/gim
+  // console.log(linkedin.match(regExpLiteral))
+  
+  try {
+      if(!idProject || !idUserToInvite || !linkedin || !number || !text || !github) { throw new Error( message ) }
+      let project = await Project.findById(idProject)
+      let userProject = await User.findById(project.userId)
+      let userToInvite = await User.findById(idUserToInvite)
+
+  
+      let findUsers = project.sendInvitation.filter((element) => element.idUser.toString() === idUserToInvite)
+      console.log('USER ENVIADO: ', findUsers)
+      if(findUsers.length > 0) {
+        throw new Error('Invitación ya enviada a este usuario.')
+      } else {
+        let pendingSendInvitation = await Project.findByIdAndUpdate(idProject, { $push: { 'sendInvitation': { idUser: ObjectId(idUserToInvite) } } })
+        await pendingSendInvitation.save()
+
+
+        // ENVIO DE MAIL AL CREADOR DEL PROYECTO
+        const sendInvitationEmail = sendEmailInvitation(text, linkedin, number, userProject, userToInvite, github)
+        await transporter.sendMail({
+          from: "Tienes una invitación para Colaborar.", // sender address <losmatabugs@gmail.com>
+          to: userToInvite.email, // list of receivers
+          subject: `Hola ${userToInvite.name} tienen una invitación.`, // Subject line
+          text: `Hola ${userToInvite.name} tienes un nueva invitaición para un proyecto.`,
+          html: `${ sendInvitationEmail }`
+      });
+        return res.status(200).json({ message:'Invitation sent successfully'})
+      }
+  } catch (error) {
+    return res.status(400).json(error.message)
+  }
+};
