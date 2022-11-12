@@ -123,3 +123,127 @@ export const emailCollaborate = (text, email, linkedin, number, userProject, use
   
  </div></div><div class="adL">
 </div></div></div><div id=":mg" class="ii gt" style="display:none"><div id=":mf" class="a3s aiL "></div></div><div class="hi"></div></div>` )};
+
+
+export const sendEmailInvitation = (text, linkedin, number, userProject, userToInvite, github) => {
+    
+  return ( `<div class=""><div class="aHl"></div><div id=":mk" tabindex="-1"></div><div id=":nr" class="ii gt" jslog="20277; u014N:xr6bB; 4:W251bGwsbnVsbCxbXV0."><div id=":m6" class="a3s aiL msg2237192363544095831"><div class="adM">
+  </div><div><div class="adM">
+   </div><table cellspacing="0" cellpadding="0" border="0" style="text-align:center;width:100%;background-color:#f2f2f2;font-family:Arial,Helvetica,sans-serif;color:#20252a">
+    <tbody>
+     <tr>
+      <td>
+       <table style="text-align:left;width:600px;margin:auto;font-size:14px" cellspacing="0" cellpadding="0" border="0">
+        <tbody>
+         <tr>
+          <td style="padding-top:10px;padding-bottom:10px;text-align:center;">
+           <a href="https://appjunior.vercel.app" target="_blank" data-saferedirecturl="https://www.google.com/url?q=https://appjunior.vercel.app">
+            <img style="border:0" src="https://res.cloudinary.com/djgghmpgh/image/upload/v1665672746/JuniorLogo_pitmgl.png" style="width:100px" >
+            <br>
+                 <strong>En JUNIOR potencia tu carrera como desarrollador.</strong>
+             <br>  
+            </a>
+          </td>
+         </tr>
+         <tr>
+          <td bgcolor="#ffffff" style="background-color:#ffffff;padding:30px;font-size:14px">
+           Hola ${userToInvite.name}! 
+           <br>
+           <br>
+            Te contactamos de <strong>JUNIOR</strong> por que tenes una invitación para participar en un proyecto! <i>“Te felicitamos el creador del proyecto te a elegido!”</i>
+           <br>
+           <br>
+            Te sugerimos que veas el proyecto y verifiques si te gusta el desafio, recorda que colaborando en el proyecto podes ganar experiencia, sumarla a tu CV y 
+            seguir aprendiendo. Te dejamos el contacto del creador del proyecto para que puedas contactarlo en caso que te interese.
+           <br>
+           <br>
+            A continuación te brindamos información del creador del proyecto, como así también el mensaje que te envía.
+           <br>  
+          </td>
+         </tr>
+         <tr>
+         <td style="background-color:white;padding:30px;padding-top:0px;font-size:14px">
+          Información del Creador del Proyecto y Proyecto:
+          <br>
+          <table align="left" style="text-align:left;margin:auto;font-size:14px" cellspacing="7" cellpadding="0" border="0">
+           <tbody>
+            <tr>
+             <td>• Nombre: </td>
+             <td>  
+              ${ userProject.name }
+             </td>
+            </tr>
+            <tr>
+             <td>• Linkedin: </td>
+             <td>
+              ${ linkedin }
+             </td>
+            </tr>
+            <tr>
+            <td>• GitHub: </td>
+            <td>
+             ${ github }
+            </td>
+           </tr>
+            <tr>
+             <td>• Email: </td>
+             <td>
+              ${ userProject.email }
+             </td>
+            </tr>
+            <tr>
+             <td>• Número de contacto (WhatsApp): </td>
+             <td>
+              ${ number }
+             </td>
+            </tr>
+            <tr>
+             <td>• Mensaje que te envia el Creador del Proyecto: </td>
+            </tr>  
+            <br>
+              ${ text }
+            </br>     
+           </tbody>
+          </table>
+         </td>
+        </tr> 
+        <tr>
+             <td bgcolor="#ffffff" style="background-color:#ffffff;padding:30px;font-size:14px">
+                 Esperamos puedan avanzar exitosamente en el proyecto. Recorda que podes actuzarlo en cualquier momento, cualquier inquietud que tengas
+                 no dudes en contactarnos así podemos ayudarte. 
+             <br>
+             <br>
+                 Que tengas una excelente semana!
+             <br>
+             <br>
+                 Saludos.
+             <br>
+             <br>
+                 JUNIOR.
+             <br>
+             </td>
+         </tr>
+         
+         <tr>
+          <td style="background-color:white;padding:30px;padding-top:0px;font-size:10px">
+           <i>Copyright © 2022 JUNIOR, All rights reserved. </i>
+           <br>
+            Estas recibiendo este e-mail porque creaste una cuenta y un proyecto en JUNIOR.
+          </td>
+         </tr>
+         <tr>
+          <td style="text-align:center;padding:15px;font-size:11px">
+            Ponete en contactos con nosotros.  
+           <a href="https://appjunior.vercel.app">Contacto</a>           
+          </td>
+         </tr>
+        </tbody>
+       </table>
+      </td>
+     </tr>
+    </tbody>
+   </table>  
+   
+   
+  </div></div><div class="adL">
+ </div></div></div><div id=":mg" class="ii gt" style="display:none"><div id=":mf" class="a3s aiL "></div></div><div class="hi"></div></div>` )};
