@@ -27,6 +27,7 @@ export const getUserById = async (req, res) => {
   }
 }
 
+// Get Project by User
 export const userProjects = async (req, res)=>{
   try {
     let { id } = req.params
