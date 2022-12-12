@@ -57,7 +57,7 @@ REACT_APP_PUBLICKEY=*****
 REACT_APP_BASE_URL_FLY="http://localhost:4001"
 ```
 
-You have to replace `DB_USER` and `DB_PASSWORD` with your own credentials to connect to postgres database. This file will be ignored by github, as it contains sensitive information (the credentials).
+You have to replace `DB_USER` and `DB_PASSWORD` with your own credentials to connect to postgres database. This file will be ignored by github, as it contains sensitive information.
 
 The `DB_KEY` is a random security keyword, you can change or keep it. 
 The `ACCESS_TOKEN` is a security keyword to Mercado Pago, you can create one in this platform and make a success buy. In this link https://www.mercadopago.com.ar/developers/es/docs/checkout-api/integration-test/test-cards you can get all information to check a success buy in TechMarket.
